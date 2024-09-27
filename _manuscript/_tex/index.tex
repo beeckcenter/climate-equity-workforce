@@ -1,0 +1,692 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
+\definecolor{quarto-callout-color}{HTML}{909090}
+\definecolor{quarto-callout-note-color}{HTML}{0758E5}
+\definecolor{quarto-callout-important-color}{HTML}{CC1914}
+\definecolor{quarto-callout-warning-color}{HTML}{EB9113}
+\definecolor{quarto-callout-tip-color}{HTML}{00A047}
+\definecolor{quarto-callout-caution-color}{HTML}{FC5300}
+\definecolor{quarto-callout-color-frame}{HTML}{acacac}
+\definecolor{quarto-callout-note-color-frame}{HTML}{4582ec}
+\definecolor{quarto-callout-important-color-frame}{HTML}{d9534f}
+\definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
+\definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
+\definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Climate resilience requires equitable access to quality green energy jobs. St.~Paul is at the forefront.},
+  pdfauthor={Elham Ali},
+  pdfkeywords={climate justice, climate-ready workforce, green
+jobs, climate change, equity},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Climate resilience requires equitable access to quality green
+energy jobs. St.~Paul is at the forefront.}
+\author{Elham Ali}
+\date{2024-09-19}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Minnesota, particularly the City of Saint Paul, has seen a surge in
+climate resilience funding aimed at expanding green energy job
+opportunities. However, BIPOC communities remain underrepresented in
+these jobs and disproportionately suffer from the adverse effects of
+human-driven climate change.
+\end{abstract}
+
+\subsection{Background}\label{background}
+
+This analysis looks at access to green energy jobs (like energy
+efficiency, renewable energy, and green construction) by race/ethnicity,
+gender, education, and income in St.~Paul, Minnesota, USA.
+
+\subsection{Research Questions}\label{research-questions}
+
+Here are some of the questions I will explore using different datasets:
+
+\begin{itemize}
+\tightlist
+\item
+  How much climate resilience funding has St.~Paul received?
+\item
+  What specific green jobs are being created in St.~Paul (e.g., energy
+  efficiency, renewable energy, green construction)?
+\item
+  What is the quality of these jobs? How much do they pay? What
+  qualifications are needed (education and experience)?
+\item
+  Who is getting these jobs, based on education, race/ethnicity, gender,
+  and income levels?
+\end{itemize}
+
+\subsection{Data Sources}\label{data-sources}
+
+The data for this project comes from:
+
+\begin{itemize}
+\tightlist
+\item
+  The National Center for O*NET Development
+\item
+  2023 Occupational Employment and Wage Survey
+\item
+  Urban Institute 11 elements of job quality: Clean Energy Job Quality
+  and Education Data
+\item
+  National and local demographic data from the 2022 American Community
+  Survey Public Use Microdata Sample (ACS PUMS)
+\item
+  US Census Bureau's 2023 QuickFacts tool
+\item
+  Invest.gov
+\item
+  Geocorr from the Missouri Census Data Center
+\end{itemize}
+
+I will reduce each large dataset to focus only on questions related to
+green jobs and job quality. Please note that some datasets have already
+been pre-processed in Python with specific filters applied. You can find
+the original raw datasets in the data folder for reference.
+
+\subsection{Analysis}\label{analysis}
+
+I will look at each question one by one and clean the data as I go. Some
+datasets might need to be combined, so I will organize the data during
+the analysis before exploring the results.
+
+\subsubsection{Load packages and
+libraries}\label{load-packages-and-libraries}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\# For folder structure}
+\FunctionTok{library}\NormalTok{(here)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+here() starts at /Users/elhamali/Documents/Data Projects/climate-equity-workforce
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ezknitr)}
+
+\DocumentationTok{\#\# For data import/cleaning}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+-- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+v dplyr     1.1.4     v readr     2.1.5
+v forcats   1.0.0     v stringr   1.5.1
+v ggplot2   3.5.1     v tibble    3.2.1
+v lubridate 1.9.3     v tidyr     1.3.1
+v purrr     1.0.2     
+\end{verbatim}
+
+\begin{verbatim}
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(purrr)}
+\FunctionTok{library}\NormalTok{(rlang)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Attaching package: 'rlang'
+
+The following objects are masked from 'package:purrr':
+
+    %@%, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl,
+    flatten_raw, invoke, splice
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(forcats)}
+\FunctionTok{library}\NormalTok{(readxl)}
+
+\DocumentationTok{\#\# For graphing}
+\FunctionTok{library}\NormalTok{(highcharter)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo 
+Highcharts (www.highcharts.com) is a Highsoft software product which is
+not free for commercial and Governmental use
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(igraph)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Attaching package: 'igraph'
+
+The following object is masked from 'package:rlang':
+
+    is_named
+
+The following objects are masked from 'package:lubridate':
+
+    %--%, union
+
+The following objects are masked from 'package:dplyr':
+
+    as_data_frame, groups, union
+
+The following objects are masked from 'package:purrr':
+
+    compose, simplify
+
+The following object is masked from 'package:tidyr':
+
+    crossing
+
+The following object is masked from 'package:tibble':
+
+    as_data_frame
+
+The following objects are masked from 'package:stats':
+
+    decompose, spectrum
+
+The following object is masked from 'package:base':
+
+    union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(RColorBrewer)}
+\FunctionTok{library}\NormalTok{(htmlwidgets)}
+\CommentTok{\# library(viridis)}
+\end{Highlighting}
+\end{Shaded}
+
+\textsubscript{Source:
+\href{https://beeckcenter.github.io/climate-equity-workforce/index-preview.html}{Article
+Notebook}}
+
+\subsubsection{1. Climate Resilience Funding for
+St.~Paul}\label{climate-resilience-funding-for-st.-paul}
+
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, bottomtitle=1mm, arc=.35mm, toptitle=1mm, leftrule=.75mm, toprule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{RQ 1: How much climate resilience funding has St.~Paul received?}, opacitybacktitle=0.6, opacityback=0, colback=white, breakable, coltitle=black, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white]
+
+The total amount of funding \textbf{Minnesota} received for climate
+resilience as of June 2024 is \textbf{\$7,101,423,527}
+
+The total amount of funding \textbf{St.~Paul} received for climate
+resilience as of June 2024 is \textbf{\$446,286,762}
+
+St.~Paul's funding is \textbf{6.28 \%} of Minnesota's total funding.
+
+Almost \textbf{95\%} of St.~Paul's funding goes to transportation
+efforts. Clean energy, buildings and manufacturing received less than
+\textbf{2\%} of funding.
+
+\end{tcolorbox}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Import data}
+\NormalTok{funding }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"processed\_data"}\NormalTok{, }\StringTok{"FundingSummary.csv"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: One or more parsing issues, call `problems()` on your data frame for details,
+e.g.:
+  dat <- vroom(...)
+  problems(dat)
+\end{verbatim}
+
+\begin{verbatim}
+Rows: 49535 Columns: 15
+-- Column specification --------------------------------------------------------
+Delimiter: ","
+chr (14): Agency Name, Bureau Name, Program Name, Category, Subcategory, Pro...
+dbl  (1): Unique ID
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{saveRDS}\NormalTok{(funding, }\FunctionTok{here}\NormalTok{(}\StringTok{"processed\_data"}\NormalTok{, }\StringTok{"funding.rds"}\NormalTok{))}
+
+\NormalTok{funding }\OtherTok{\textless{}{-}} \FunctionTok{readRDS}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"processed\_data"}\NormalTok{, }\StringTok{"funding.rds"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\textsubscript{Source:
+\href{https://beeckcenter.github.io/climate-equity-workforce/index-preview.html}{Article
+Notebook}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#\# Convert the \textasciigrave{}Funding Amount\textasciigrave{} to numeric and handling commas in the values}
+
+\NormalTok{funding }\OtherTok{\textless{}{-}}\NormalTok{ funding }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Funding Amount}\StringTok{\textasciigrave{}} \OtherTok{=} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{gsub}\NormalTok{(}\StringTok{","}\NormalTok{, }\StringTok{""}\NormalTok{, }\StringTok{\textasciigrave{}}\AttributeTok{Funding Amount}\StringTok{\textasciigrave{}}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: There was 1 warning in `mutate()`.
+i In argument: `Funding Amount = as.numeric(gsub(",", "", `Funding Amount`))`.
+Caused by warning:
+! NAs introduced by coercion
+\end{verbatim}
+
+\textsubscript{Source:
+\href{https://beeckcenter.github.io/climate-equity-workforce/index-preview.html}{Article
+Notebook}}
+
+\paragraph{Filter for MN State and City of
+St.~Paul}\label{filter-for-mn-state-and-city-of-st.-paul}
+
+First, I will filter the dataset by State: \textbf{Minnesota}, and then
+narrow it down further to focus on the \textbf{City of St.~Paul} and the
+surrounding region. Please note that St.~Paul is part of the
+\textbf{Minneapolis-St.~Paul-Bloomington, MN-WI} region, so I'll ensure
+it's included within that larger metropolitan area.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Filter for Minnesota funding}
+\NormalTok{minnesota\_funding }\OtherTok{\textless{}{-}}\NormalTok{ funding }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(State }\SpecialCharTok{==} \StringTok{"Minnesota"}\NormalTok{)}
+
+\FunctionTok{saveRDS}\NormalTok{(minnesota\_funding, }\FunctionTok{here}\NormalTok{(}\StringTok{"processed\_data"}\NormalTok{, }\StringTok{"minnesota\_funding.rds"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\textsubscript{Source:
+\href{https://beeckcenter.github.io/climate-equity-workforce/index-preview.html}{Article
+Notebook}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Further filter for St. Paul, considering variations in city names}
+\NormalTok{st\_paul\_funding }\OtherTok{\textless{}{-}}\NormalTok{ minnesota\_funding }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\FunctionTok{str\_detect}\NormalTok{(City, }\FunctionTok{regex}\NormalTok{(}\StringTok{"Saint Paul|St. Paul|South St. Paul|Minneapolis{-}{-}St. Paul|Minneapolis{-}St. Paul"}\NormalTok{, }\AttributeTok{ignore\_case =} \ConstantTok{TRUE}\NormalTok{)))}
+
+\FunctionTok{saveRDS}\NormalTok{(st\_paul\_funding, }\FunctionTok{here}\NormalTok{(}\StringTok{"processed\_data"}\NormalTok{, }\StringTok{"st\_paul\_funding.rds"}\NormalTok{))}
+
+\CommentTok{\# glimpse(st\_paul\_funding)}
+\end{Highlighting}
+\end{Shaded}
+
+\textsubscript{Source:
+\href{https://beeckcenter.github.io/climate-equity-workforce/index-preview.html}{Article
+Notebook}}
+
+\paragraph{Calculate funding for MN State and City of
+St.~Paul}\label{calculate-funding-for-mn-state-and-city-of-st.-paul}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{minnesota\_funding }\OtherTok{\textless{}{-}} \FunctionTok{readRDS}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"processed\_data"}\NormalTok{, }\StringTok{"minnesota\_funding.rds"}\NormalTok{))}
+\NormalTok{st\_paul\_funding }\OtherTok{\textless{}{-}} \FunctionTok{readRDS}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"processed\_data"}\NormalTok{, }\StringTok{"st\_paul\_funding.rds"}\NormalTok{))}
+
+\CommentTok{\# Calculate total funding for Minnesota}
+\NormalTok{total\_minnesota\_funding }\OtherTok{\textless{}{-}}\NormalTok{ minnesota\_funding }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_funding =} \FunctionTok{sum}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Funding Amount}\StringTok{\textasciigrave{}}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"The total amount of funding Minnesota received for climate as of June 2024 is $"}\NormalTok{, }
+    \FunctionTok{format}\NormalTok{(total\_minnesota\_funding}\SpecialCharTok{$}\NormalTok{total\_funding, }\AttributeTok{big.mark =} \StringTok{","}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+The total amount of funding Minnesota received for climate as of June 2024 is $ 7,101,423,527 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate total funding for St. Paul}
+\NormalTok{total\_st\_paul\_funding }\OtherTok{\textless{}{-}}\NormalTok{ st\_paul\_funding }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_funding =} \FunctionTok{sum}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Funding Amount}\StringTok{\textasciigrave{}}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))}
+
+\FunctionTok{cat}\NormalTok{(}\StringTok{"The total amount of funding St. Paul received for climate as of June 2024 is $"}\NormalTok{, }
+    \FunctionTok{format}\NormalTok{(total\_st\_paul\_funding}\SpecialCharTok{$}\NormalTok{total\_funding, }\AttributeTok{big.mark =} \StringTok{","}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+The total amount of funding St. Paul received for climate as of June 2024 is $ 446,286,762 
+\end{verbatim}
+
+\textsubscript{Source:
+\href{https://beeckcenter.github.io/climate-equity-workforce/index-preview.html}{Article
+Notebook}}
+
+\paragraph{Calculate fraction of St.~Paul's funding from
+MN's}\label{calculate-fraction-of-st.-pauls-funding-from-mns}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{minnesota\_funding }\OtherTok{\textless{}{-}} \FunctionTok{readRDS}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"processed\_data"}\NormalTok{, }\StringTok{"minnesota\_funding.rds"}\NormalTok{))}
+\NormalTok{st\_paul\_funding }\OtherTok{\textless{}{-}} \FunctionTok{readRDS}\NormalTok{(}\FunctionTok{here}\NormalTok{(}\StringTok{"processed\_data"}\NormalTok{, }\StringTok{"st\_paul\_funding.rds"}\NormalTok{))}
+
+\CommentTok{\# Calculate total funding for Minnesota}
+\NormalTok{total\_minnesota\_funding }\OtherTok{\textless{}{-}}\NormalTok{ minnesota\_funding }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_funding =} \FunctionTok{sum}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Funding Amount}\StringTok{\textasciigrave{}}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pull}\NormalTok{(total\_funding)}
+
+\CommentTok{\# Calculate total funding for St. Paul}
+\NormalTok{total\_st\_paul\_funding }\OtherTok{\textless{}{-}}\NormalTok{ st\_paul\_funding }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_funding =} \FunctionTok{sum}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Funding Amount}\StringTok{\textasciigrave{}}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pull}\NormalTok{(total\_funding)}
+
+\CommentTok{\# Calculate the fraction of St. Paul\textquotesingle{}s funding from Minnesota\textquotesingle{}s total funding}
+\NormalTok{fraction\_st\_paul }\OtherTok{\textless{}{-}}\NormalTok{ total\_st\_paul\_funding }\SpecialCharTok{/}\NormalTok{ total\_minnesota\_funding}
+
+\CommentTok{\# Output the results}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"The fraction of St. Paul\textquotesingle{}s funding from Minnesota\textquotesingle{}s total funding is: "}\NormalTok{, }
+    \FunctionTok{round}\NormalTok{(fraction\_st\_paul, }\DecValTok{4}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+The fraction of St. Paul's funding from Minnesota's total funding is:  0.0628 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"This means St. Paul\textquotesingle{}s funding is"}\NormalTok{, }\FunctionTok{round}\NormalTok{(fraction\_st\_paul }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{2}\NormalTok{), }\StringTok{"\% of Minnesota\textquotesingle{}s total funding.}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+This means St. Paul's funding is 6.28 % of Minnesota's total funding.
+\end{verbatim}
+
+\textsubscript{Source:
+\href{https://beeckcenter.github.io/climate-equity-workforce/index-preview.html}{Article
+Notebook}}
+
+\paragraph{Visualize categories of funding for
+St.~Paul}\label{visualize-categories-of-funding-for-st.-paul}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Group the St. Paul data by Category and calculate the total funding for each category}
+\NormalTok{st\_paul\_category\_funding }\OtherTok{\textless{}{-}}\NormalTok{ st\_paul\_funding }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(Category) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_funding =} \FunctionTok{sum}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Funding Amount}\StringTok{\textasciigrave{}}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(total\_funding))}
+
+\NormalTok{colors }\OtherTok{\textless{}{-}} \FunctionTok{brewer.pal}\NormalTok{(}\AttributeTok{n =} \FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(st\_paul\_category\_funding}\SpecialCharTok{$}\NormalTok{Category)), }\StringTok{"Set3"}\NormalTok{)}
+
+\CommentTok{\# Create an interactive bar chart using highcharter}
+\NormalTok{hchart\_bar }\OtherTok{\textless{}{-}} \FunctionTok{highchart}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_chart}\NormalTok{(}\AttributeTok{type =} \StringTok{"bar"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_xAxis}\NormalTok{(}\AttributeTok{categories =}\NormalTok{ st\_paul\_category\_funding}\SpecialCharTok{$}\NormalTok{Category, }\AttributeTok{title =} \FunctionTok{list}\NormalTok{(}\AttributeTok{text =} \StringTok{"Category"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_yAxis}\NormalTok{(}\AttributeTok{title =} \FunctionTok{list}\NormalTok{(}\AttributeTok{text =} \StringTok{"Total Funding ($)"}\NormalTok{), }\AttributeTok{labels =} \FunctionTok{list}\NormalTok{(}\AttributeTok{format =} \StringTok{"\{value:,.0f\}"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_add\_series}\NormalTok{(}\AttributeTok{name =} \StringTok{"Total Funding"}\NormalTok{, }
+                \AttributeTok{data =}\NormalTok{ st\_paul\_category\_funding}\SpecialCharTok{$}\NormalTok{total\_funding, }
+                \AttributeTok{colorByPoint =} \ConstantTok{TRUE}\NormalTok{, }
+                \AttributeTok{colors =}\NormalTok{ colors) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_title}\NormalTok{(}\AttributeTok{text =} \StringTok{"Total Funding by Category in St. Paul"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_tooltip}\NormalTok{(}\AttributeTok{pointFormat =} \StringTok{"Total Funding: $\{point.y:,.0f\}"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_exporting}\NormalTok{(}
+    \AttributeTok{enabled =} \ConstantTok{TRUE}\NormalTok{,}
+    \AttributeTok{buttons =} \FunctionTok{list}\NormalTok{(}\AttributeTok{contextButton =} \FunctionTok{list}\NormalTok{(}\AttributeTok{menuItems =} \FunctionTok{c}\NormalTok{(}\StringTok{"downloadPNG"}\NormalTok{, }\StringTok{"downloadJPEG"}\NormalTok{, }\StringTok{"downloadSVG"}\NormalTok{, }\StringTok{"downloadPDF"}\NormalTok{)))}
+\NormalTok{  )}
+
+\CommentTok{\# Saving the chart as an HTML file}
+\FunctionTok{saveWidget}\NormalTok{(hchart\_bar, }\AttributeTok{file =} \FunctionTok{here}\NormalTok{(}\StringTok{"graphs"}\NormalTok{, }\StringTok{"st\_paul\_funding\_bar.html"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\textsubscript{Source:
+\href{https://beeckcenter.github.io/climate-equity-workforce/index-preview.html}{Article
+Notebook}}
+
+A quick glance tells us that almost \textbf{95\%} of St.~Paul's funding
+goes to transportation efforts. Clean energy, buildings and
+manufacturing received less than \textbf{2\%} of funding.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create an interactive pie chart using highcharter}
+\NormalTok{hchart\_pie }\OtherTok{\textless{}{-}} \FunctionTok{highchart}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_chart}\NormalTok{(}\AttributeTok{type =} \StringTok{"pie"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_add\_series}\NormalTok{(}\AttributeTok{name =} \StringTok{"Total Funding"}\NormalTok{, }
+                \AttributeTok{data =} \FunctionTok{list\_parse2}\NormalTok{(st\_paul\_category\_funding }\SpecialCharTok{\%\textgreater{}\%} 
+                                   \FunctionTok{mutate}\NormalTok{(}\AttributeTok{name =}\NormalTok{ Category, }\AttributeTok{y =}\NormalTok{ total\_funding)), }
+                \AttributeTok{colors =}\NormalTok{ colors) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_title}\NormalTok{(}\AttributeTok{text =} \StringTok{"Total Funding by Category in St. Paul"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_tooltip}\NormalTok{(}\AttributeTok{pointFormat =} \StringTok{"Total Funding: $\{point.y:,.0f\}"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_plotOptions}\NormalTok{(}\AttributeTok{pie =} \FunctionTok{list}\NormalTok{(}\AttributeTok{innerSize =} \StringTok{\textquotesingle{}50\%\textquotesingle{}}\NormalTok{, }\AttributeTok{dataLabels =} \FunctionTok{list}\NormalTok{(}\AttributeTok{enabled =} \ConstantTok{TRUE}\NormalTok{))) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{hc\_exporting}\NormalTok{(}
+    \AttributeTok{enabled =} \ConstantTok{TRUE}\NormalTok{,}
+    \AttributeTok{buttons =} \FunctionTok{list}\NormalTok{(}\AttributeTok{contextButton =} \FunctionTok{list}\NormalTok{(}\AttributeTok{menuItems =} \FunctionTok{c}\NormalTok{(}\StringTok{"downloadPNG"}\NormalTok{, }\StringTok{"downloadJPEG"}\NormalTok{, }\StringTok{"downloadSVG"}\NormalTok{, }\StringTok{"downloadPDF"}\NormalTok{)))}
+\NormalTok{  )}
+
+\FunctionTok{saveWidget}\NormalTok{(hchart\_pie, }\AttributeTok{file =} \FunctionTok{here}\NormalTok{(}\StringTok{"graphs"}\NormalTok{, }\StringTok{"st\_paul\_funding\_pie.html"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\textsubscript{Source:
+\href{https://beeckcenter.github.io/climate-equity-workforce/index-preview.html}{Article
+Notebook}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\# Export the funding data to CSV for graphing}
+\FunctionTok{write.csv}\NormalTok{(minnesota\_funding, }\FunctionTok{here}\NormalTok{(}\StringTok{"processed\_data"}\NormalTok{, }\StringTok{"minnesota\_funding.csv"}\NormalTok{), }\AttributeTok{row.names =} \ConstantTok{FALSE}\NormalTok{)}
+\FunctionTok{write.csv}\NormalTok{(st\_paul\_funding, }\FunctionTok{here}\NormalTok{(}\StringTok{"processed\_data"}\NormalTok{, }\StringTok{"st\_paul\_funding.csv"}\NormalTok{), }\AttributeTok{row.names =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\textsubscript{Source:
+\href{https://beeckcenter.github.io/climate-equity-workforce/index-preview.html}{Article
+Notebook}}
+
+\subsubsection{2. Types of Green Jobs in
+St.~Paul}\label{types-of-green-jobs-in-st.-paul}
+
+\subsubsection{3. Quality, Pay, and Qualifications of Green
+Jobs}\label{quality-pay-and-qualifications-of-green-jobs}
+
+\subsubsection{4. Demographics of Green Job
+Recipients}\label{demographics-of-green-job-recipients}
+
+
+
+\end{document}

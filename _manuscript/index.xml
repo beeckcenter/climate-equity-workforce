@@ -1,0 +1,810 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving
+and Interchange DTD v1.2 20190208//EN" "JATS-archivearticle1.dtd">
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.2" article-type="other">
+  <front>
+    <journal-meta>
+      <journal-id/>
+      <journal-title-group>
+        <journal-title>Beeck Center for Social Impact and
+Innovation</journal-title>
+      </journal-title-group>
+      <issn/>
+      <publisher>
+        <publisher-name/>
+      </publisher>
+    </journal-meta>
+    <article-meta>
+      <title-group>
+        <article-title>Climate resilience requires equitable access to quality
+green energy jobs. St. Paul is at the forefront.</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author" corresp="yes">
+          <name>
+            <surname>Ali</surname>
+            <given-names>Elham</given-names>
+          </name>
+          <string-name>Elham Ali</string-name>
+          <email>elham.ali@georgetown.edu</email>
+          <role>Researcher</role>
+          <role>Data Storytelling</role>
+          <role>Human-centered Design</role>
+          <role>Data Visualization</role>
+          <xref ref-type="aff" rid="aff-1">a</xref>
+          <xref ref-type="corresp" rid="cor-1">*</xref>
+        </contrib>
+      </contrib-group>
+      <aff id="aff-1">
+        <institution-wrap>
+          <institution>Beeck Center for Social Impact and Innovation at Georgetown
+University</institution>
+        </institution-wrap>
+      </aff>
+      <author-notes>
+        <corresp id="cor-1">elham.ali@georgetown.edu</corresp>
+      </author-notes>
+      <pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-09-19">
+        <year>2024</year>
+        <month>9</month>
+        <day>19</day>
+      </pub-date>
+      <history/>
+      <permissions>
+        <license license-type="creative-commons">
+          <ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/">https://creativecommons.org/licenses/by-sa/4.0/</ali:license_ref>
+        </license>
+      </permissions>
+      <abstract>
+        <p>Minnesota, particularly the City of Saint Paul, has seen a surge in
+climate resilience funding aimed at expanding green energy job
+opportunities. However, BIPOC communities remain underrepresented in
+these jobs and disproportionately suffer from the adverse effects of
+human-driven climate change.</p>
+      </abstract>
+      <kwd-group kwd-group-type="author">
+        <kwd>climate justice</kwd>
+        <kwd>climate-ready workforce</kwd>
+        <kwd>green jobs</kwd>
+        <kwd>climate change</kwd>
+        <kwd>equity</kwd>
+      </kwd-group>
+    </article-meta>
+  </front>
+  <body>
+    <sec id="background">
+      <title>Background</title>
+      <p>This analysis looks at access to green energy jobs (like energy
+  efficiency, renewable energy, and green construction) by
+  race/ethnicity, gender, education, and income in St. Paul, Minnesota,
+  USA.</p>
+    </sec>
+    <sec id="research-questions">
+      <title>Research Questions</title>
+      <p>Here are some of the questions I will explore using different
+  datasets:</p>
+      <list list-type="bullet">
+        <list-item>
+          <p>How much climate resilience funding has St. Paul received?</p>
+        </list-item>
+        <list-item>
+          <p>What specific green jobs are being created in St. Paul (e.g.,
+      energy efficiency, renewable energy, green construction)?</p>
+        </list-item>
+        <list-item>
+          <p>What is the quality of these jobs? How much do they pay? What
+      qualifications are needed (education and experience)?</p>
+        </list-item>
+        <list-item>
+          <p>Who is getting these jobs, based on education, race/ethnicity,
+      gender, and income levels?</p>
+        </list-item>
+      </list>
+    </sec>
+    <sec id="data-sources">
+      <title>Data Sources</title>
+      <p>The data for this project comes from:</p>
+      <list list-type="bullet">
+        <list-item>
+          <p>The National Center for O*NET Development</p>
+        </list-item>
+        <list-item>
+          <p>2023 Occupational Employment and Wage Survey</p>
+        </list-item>
+        <list-item>
+          <p>Urban Institute 11 elements of job quality: Clean Energy Job
+      Quality and Education Data</p>
+        </list-item>
+        <list-item>
+          <p>National and local demographic data from the 2022 American
+      Community Survey Public Use Microdata Sample (ACS PUMS)</p>
+        </list-item>
+        <list-item>
+          <p>US Census Bureau’s 2023 QuickFacts tool</p>
+        </list-item>
+        <list-item>
+          <p>Invest.gov</p>
+        </list-item>
+        <list-item>
+          <p>Geocorr from the Missouri Census Data Center</p>
+        </list-item>
+      </list>
+      <p>I will reduce each large dataset to focus only on questions related
+  to green jobs and job quality. Please note that some datasets have
+  already been pre-processed in Python with specific filters applied.
+  You can find the original raw datasets in the data folder for
+  reference.</p>
+    </sec>
+    <sec id="analysis">
+      <title>Analysis</title>
+      <p>I will look at each question one by one and clean the data as I go.
+  Some datasets might need to be combined, so I will organize the data
+  during the analysis before exploring the results.</p>
+      <sec id="load-packages-and-libraries">
+        <title>Load packages and libraries</title>
+        <code language="r script">## For folder structure
+library(here)</code>
+        <preformat>here() starts at /Users/elhamali/Documents/Data Projects/climate-equity-workforce</preformat>
+        <code language="r script">library(ezknitr)
+
+## For data import/cleaning
+library(tidyverse)</code>
+        <preformat>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     </preformat>
+        <preformat>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</preformat>
+        <code language="r script">library(purrr)
+library(rlang)</code>
+        <preformat>
+Attaching package: 'rlang'
+
+The following objects are masked from 'package:purrr':
+
+    %@%, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl,
+    flatten_raw, invoke, splice</preformat>
+        <code language="r script">library(forcats)
+library(readxl)
+
+## For graphing
+library(highcharter)</code>
+        <preformat>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo </preformat>
+        <code language="r script">library(igraph)</code>
+        <preformat>
+Attaching package: 'igraph'
+
+The following object is masked from 'package:rlang':
+
+    is_named
+
+The following objects are masked from 'package:lubridate':
+
+    %--%, union
+
+The following objects are masked from 'package:dplyr':
+
+    as_data_frame, groups, union
+
+The following objects are masked from 'package:purrr':
+
+    compose, simplify
+
+The following object is masked from 'package:tidyr':
+
+    crossing
+
+The following object is masked from 'package:tibble':
+
+    as_data_frame
+
+The following objects are masked from 'package:stats':
+
+    decompose, spectrum
+
+The following object is masked from 'package:base':
+
+    union</preformat>
+        <code language="r script">library(RColorBrewer)
+library(htmlwidgets)
+# library(viridis)</code>
+      </sec>
+      <sec id="climate-resilience-funding-for-st.-paul">
+        <title>1. Climate Resilience Funding for St. Paul</title>
+        <boxed-text>
+          <p>
+            <bold>RQ 1: How much climate resilience funding has St. Paul
+    received?</bold>
+          </p>
+          <p>The total amount of funding <bold>Minnesota</bold> received for
+    climate resilience as of June 2024 is
+    <bold>$7,101,423,527</bold></p>
+          <p>The total amount of funding <bold>St. Paul</bold> received for
+    climate resilience as of June 2024 is <bold>$446,286,762</bold></p>
+          <p>St. Paul’s funding is <bold>6.28 %</bold> of Minnesota’s total
+    funding.</p>
+          <p>Almost <bold>95%</bold> of St. Paul’s funding goes to
+    transportation efforts. Clean energy, buildings and manufacturing
+    received less than <bold>2%</bold> of funding.</p>
+        </boxed-text>
+        <code language="r script"># Import data
+funding &lt;- read_csv(here("processed_data", "FundingSummary.csv"))</code>
+        <preformat>Warning: One or more parsing issues, call `problems()` on your data frame for details,
+e.g.:
+  dat &lt;- vroom(...)
+  problems(dat)</preformat>
+        <preformat>Rows: 49535 Columns: 15
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (14): Agency Name, Bureau Name, Program Name, Category, Subcategory, Pro...
+dbl  (1): Unique ID
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</preformat>
+        <code language="r script">saveRDS(funding, here("processed_data", "funding.rds"))
+
+funding &lt;- readRDS(here("processed_data", "funding.rds"))</code>
+        <code language="r script">### Convert the `Funding Amount` to numeric and handling commas in the values
+
+funding &lt;- funding %&gt;%
+  mutate(`Funding Amount` = as.numeric(gsub(",", "", `Funding Amount`)))</code>
+        <preformat>Warning: There was 1 warning in `mutate()`.
+ℹ In argument: `Funding Amount = as.numeric(gsub(",", "", `Funding Amount`))`.
+Caused by warning:
+! NAs introduced by coercion</preformat>
+        <sec id="filter-for-mn-state-and-city-of-st.-paul">
+          <title>Filter for MN State and City of St. Paul</title>
+          <p>First, I will filter the dataset by State:
+      <bold>Minnesota</bold>, and then narrow it down further to focus
+      on the <bold>City of St. Paul</bold> and the surrounding region.
+      Please note that St. Paul is part of the
+      <bold>Minneapolis-St. Paul-Bloomington, MN-WI</bold> region, so
+      I’ll ensure it’s included within that larger metropolitan
+      area.</p>
+          <code language="r script"># Filter for Minnesota funding
+minnesota_funding &lt;- funding %&gt;%
+  filter(State == "Minnesota")
+
+saveRDS(minnesota_funding, here("processed_data", "minnesota_funding.rds"))</code>
+          <code language="r script"># Further filter for St. Paul, considering variations in city names
+st_paul_funding &lt;- minnesota_funding %&gt;%
+  filter(str_detect(City, regex("Saint Paul|St. Paul|South St. Paul|Minneapolis--St. Paul|Minneapolis-St. Paul", ignore_case = TRUE)))
+
+saveRDS(st_paul_funding, here("processed_data", "st_paul_funding.rds"))
+
+# glimpse(st_paul_funding)</code>
+        </sec>
+        <sec id="calculate-funding-for-mn-state-and-city-of-st.-paul">
+          <title>Calculate funding for MN State and City of St. Paul</title>
+          <code language="r script">minnesota_funding &lt;- readRDS(here("processed_data", "minnesota_funding.rds"))
+st_paul_funding &lt;- readRDS(here("processed_data", "st_paul_funding.rds"))
+
+# Calculate total funding for Minnesota
+total_minnesota_funding &lt;- minnesota_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE))
+
+cat("The total amount of funding Minnesota received for climate as of June 2024 is $", 
+    format(total_minnesota_funding$total_funding, big.mark = ","), "\n")</code>
+          <preformat>The total amount of funding Minnesota received for climate as of June 2024 is $ 7,101,423,527 </preformat>
+          <code language="r script"># Calculate total funding for St. Paul
+total_st_paul_funding &lt;- st_paul_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE))
+
+cat("The total amount of funding St. Paul received for climate as of June 2024 is $", 
+    format(total_st_paul_funding$total_funding, big.mark = ","), "\n")</code>
+          <preformat>The total amount of funding St. Paul received for climate as of June 2024 is $ 446,286,762 </preformat>
+        </sec>
+        <sec id="calculate-fraction-of-st.-pauls-funding-from-mns">
+          <title>Calculate fraction of St. Paul’s funding from MN’s</title>
+          <code language="r script">minnesota_funding &lt;- readRDS(here("processed_data", "minnesota_funding.rds"))
+st_paul_funding &lt;- readRDS(here("processed_data", "st_paul_funding.rds"))
+
+# Calculate total funding for Minnesota
+total_minnesota_funding &lt;- minnesota_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE)) %&gt;%
+  pull(total_funding)
+
+# Calculate total funding for St. Paul
+total_st_paul_funding &lt;- st_paul_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE)) %&gt;%
+  pull(total_funding)
+
+# Calculate the fraction of St. Paul's funding from Minnesota's total funding
+fraction_st_paul &lt;- total_st_paul_funding / total_minnesota_funding
+
+# Output the results
+cat("The fraction of St. Paul's funding from Minnesota's total funding is: ", 
+    round(fraction_st_paul, 4), "\n")</code>
+          <preformat>The fraction of St. Paul's funding from Minnesota's total funding is:  0.0628 </preformat>
+          <code language="r script">cat("This means St. Paul's funding is", round(fraction_st_paul * 100, 2), "% of Minnesota's total funding.\n")</code>
+          <preformat>This means St. Paul's funding is 6.28 % of Minnesota's total funding.</preformat>
+        </sec>
+        <sec id="visualize-categories-of-funding-for-st.-paul">
+          <title>Visualize categories of funding for St. Paul</title>
+          <code language="r script"># Group the St. Paul data by Category and calculate the total funding for each category
+st_paul_category_funding &lt;- st_paul_funding %&gt;%
+  group_by(Category) %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE)) %&gt;%
+  arrange(desc(total_funding))
+
+colors &lt;- brewer.pal(n = length(unique(st_paul_category_funding$Category)), "Set3")
+
+# Create an interactive bar chart using highcharter
+hchart_bar &lt;- highchart() %&gt;%
+  hc_chart(type = "bar") %&gt;%
+  hc_xAxis(categories = st_paul_category_funding$Category, title = list(text = "Category")) %&gt;%
+  hc_yAxis(title = list(text = "Total Funding ($)"), labels = list(format = "{value:,.0f}")) %&gt;%
+  hc_add_series(name = "Total Funding", 
+                data = st_paul_category_funding$total_funding, 
+                colorByPoint = TRUE, 
+                colors = colors) %&gt;%
+  hc_title(text = "Total Funding by Category in St. Paul") %&gt;%
+  hc_tooltip(pointFormat = "Total Funding: ${point.y:,.0f}") %&gt;%
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(contextButton = list(menuItems = c("downloadPNG", "downloadJPEG", "downloadSVG", "downloadPDF")))
+  )
+
+# Saving the chart as an HTML file
+saveWidget(hchart_bar, file = here("graphs", "st_paul_funding_bar.html"))</code>
+          <p>A quick glance tells us that almost <bold>95%</bold> of
+      St. Paul’s funding goes to transportation efforts. Clean energy,
+      buildings and manufacturing received less than <bold>2%</bold> of
+      funding.</p>
+          <code language="r script"># Create an interactive pie chart using highcharter
+hchart_pie &lt;- highchart() %&gt;%
+  hc_chart(type = "pie") %&gt;%
+  hc_add_series(name = "Total Funding", 
+                data = list_parse2(st_paul_category_funding %&gt;% 
+                                   mutate(name = Category, y = total_funding)), 
+                colors = colors) %&gt;%
+  hc_title(text = "Total Funding by Category in St. Paul") %&gt;%
+  hc_tooltip(pointFormat = "Total Funding: ${point.y:,.0f}") %&gt;%
+  hc_plotOptions(pie = list(innerSize = '50%', dataLabels = list(enabled = TRUE))) %&gt;%
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(contextButton = list(menuItems = c("downloadPNG", "downloadJPEG", "downloadSVG", "downloadPDF")))
+  )
+
+saveWidget(hchart_pie, file = here("graphs", "st_paul_funding_pie.html"))</code>
+          <code language="r script">## Export the funding data to CSV for graphing
+write.csv(minnesota_funding, here("processed_data", "minnesota_funding.csv"), row.names = FALSE)
+write.csv(st_paul_funding, here("processed_data", "st_paul_funding.csv"), row.names = FALSE)</code>
+        </sec>
+      </sec>
+      <sec id="types-of-green-jobs-in-st.-paul">
+        <title>2. Types of Green Jobs in St. Paul</title>
+      </sec>
+      <sec id="quality-pay-and-qualifications-of-green-jobs">
+        <title>3. Quality, Pay, and Qualifications of Green Jobs</title>
+      </sec>
+      <sec id="demographics-of-green-job-recipients">
+        <title>4. Demographics of Green Job Recipients</title>
+      </sec>
+    </sec>
+  </body>
+  <back>
+</back>
+  <sub-article article-type="notebook" id="nb-2-nb-article">
+    <front-stub>
+      <title-group>
+        <article-title>Climate resilience requires equitable access to quality
+green energy jobs. St. Paul is at the forefront.</article-title>
+      </title-group>
+      <contrib-group>
+        <contrib contrib-type="author" corresp="yes">
+          <name>
+            <surname>Ali</surname>
+            <given-names>Elham</given-names>
+          </name>
+          <string-name>Elham Ali</string-name>
+          <email>elham.ali@georgetown.edu</email>
+          <role>Researcher</role>
+          <role>Data Storytelling</role>
+          <role>Human-centered Design</role>
+          <role>Data Visualization</role>
+          <xref ref-type="aff" rid="aff-1-nb-article">a</xref>
+          <xref ref-type="corresp" rid="cor-1-nb-article">*</xref>
+        </contrib>
+      </contrib-group>
+      <aff id="aff-1-nb-article">
+        <institution-wrap>
+          <institution>Beeck Center for Social Impact and Innovation at Georgetown
+University</institution>
+        </institution-wrap>
+      </aff>
+      <author-notes>
+        <corresp id="cor-1-nb-article">elham.ali@georgetown.edu</corresp>
+      </author-notes>
+      <abstract>
+        <p>Minnesota, particularly the City of Saint Paul, has seen a surge in
+climate resilience funding aimed at expanding green energy job
+opportunities. However, BIPOC communities remain underrepresented in
+these jobs and disproportionately suffer from the adverse effects of
+human-driven climate change.</p>
+      </abstract>
+    </front-stub>
+    <body>
+      <sec id="background-nb-article">
+        <title>Background</title>
+        <p>This analysis looks at access to green energy jobs (like energy
+  efficiency, renewable energy, and green construction) by
+  race/ethnicity, gender, education, and income in St. Paul, Minnesota,
+  USA.</p>
+      </sec>
+      <sec id="research-questions-nb-article">
+        <title>Research Questions</title>
+        <p>Here are some of the questions I will explore using different
+  datasets:</p>
+        <list list-type="bullet">
+          <list-item>
+            <p>How much climate resilience funding has St. Paul received?</p>
+          </list-item>
+          <list-item>
+            <p>What specific green jobs are being created in St. Paul (e.g.,
+      energy efficiency, renewable energy, green construction)?</p>
+          </list-item>
+          <list-item>
+            <p>What is the quality of these jobs? How much do they pay? What
+      qualifications are needed (education and experience)?</p>
+          </list-item>
+          <list-item>
+            <p>Who is getting these jobs, based on education, race/ethnicity,
+      gender, and income levels?</p>
+          </list-item>
+        </list>
+      </sec>
+      <sec id="data-sources-nb-article">
+        <title>Data Sources</title>
+        <p>The data for this project comes from:</p>
+        <list list-type="bullet">
+          <list-item>
+            <p>The National Center for O*NET Development</p>
+          </list-item>
+          <list-item>
+            <p>2023 Occupational Employment and Wage Survey</p>
+          </list-item>
+          <list-item>
+            <p>Urban Institute 11 elements of job quality: Clean Energy Job
+      Quality and Education Data</p>
+          </list-item>
+          <list-item>
+            <p>National and local demographic data from the 2022 American
+      Community Survey Public Use Microdata Sample (ACS PUMS)</p>
+          </list-item>
+          <list-item>
+            <p>US Census Bureau’s 2023 QuickFacts tool</p>
+          </list-item>
+          <list-item>
+            <p>Invest.gov</p>
+          </list-item>
+          <list-item>
+            <p>Geocorr from the Missouri Census Data Center</p>
+          </list-item>
+        </list>
+        <p>I will reduce each large dataset to focus only on questions related
+  to green jobs and job quality. Please note that some datasets have
+  already been pre-processed in Python with specific filters applied.
+  You can find the original raw datasets in the data folder for
+  reference.</p>
+      </sec>
+      <sec id="analysis-nb-article">
+        <title>Analysis</title>
+        <p>I will look at each question one by one and clean the data as I go.
+  Some datasets might need to be combined, so I will organize the data
+  during the analysis before exploring the results.</p>
+        <sec id="load-packages-and-libraries-nb-article">
+          <title>Load packages and libraries</title>
+          <sec id="nb-code-cell-1-nb-article" specific-use="notebook-code">
+            <code language="r script">## For folder structure
+library(here)</code>
+            <code language="r script">library(ezknitr)
+
+## For data import/cleaning
+library(tidyverse)</code>
+            <code language="r script">library(purrr)
+library(rlang)</code>
+            <code language="r script">library(forcats)
+library(readxl)
+
+## For graphing
+library(highcharter)</code>
+            <code language="r script">library(igraph)</code>
+            <code language="r script">library(RColorBrewer)
+library(htmlwidgets)
+# library(viridis)</code>
+            <sec id="nb-code-cell-1-output-0-nb-article" specific-use="notebook-output">
+              <preformat>here() starts at /Users/elhamali/Documents/Data Projects/climate-equity-workforce</preformat>
+            </sec>
+            <sec id="nb-code-cell-1-output-1-nb-article" specific-use="notebook-output">
+              <preformat>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     </preformat>
+            </sec>
+            <sec id="nb-code-cell-1-output-2-nb-article" specific-use="notebook-output">
+              <preformat>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</preformat>
+            </sec>
+            <sec id="nb-code-cell-1-output-3-nb-article" specific-use="notebook-output">
+              <preformat>
+Attaching package: 'rlang'
+
+The following objects are masked from 'package:purrr':
+
+    %@%, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl,
+    flatten_raw, invoke, splice</preformat>
+            </sec>
+            <sec id="nb-code-cell-1-output-4-nb-article" specific-use="notebook-output">
+              <preformat>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo </preformat>
+            </sec>
+            <sec id="nb-code-cell-1-output-5-nb-article" specific-use="notebook-output">
+              <preformat>
+Attaching package: 'igraph'
+
+The following object is masked from 'package:rlang':
+
+    is_named
+
+The following objects are masked from 'package:lubridate':
+
+    %--%, union
+
+The following objects are masked from 'package:dplyr':
+
+    as_data_frame, groups, union
+
+The following objects are masked from 'package:purrr':
+
+    compose, simplify
+
+The following object is masked from 'package:tidyr':
+
+    crossing
+
+The following object is masked from 'package:tibble':
+
+    as_data_frame
+
+The following objects are masked from 'package:stats':
+
+    decompose, spectrum
+
+The following object is masked from 'package:base':
+
+    union</preformat>
+            </sec>
+          </sec>
+        </sec>
+        <sec id="climate-resilience-funding-for-st.-paul-nb-article">
+          <title>1. Climate Resilience Funding for St. Paul</title>
+          <boxed-text>
+            <disp-quote>
+              <p>
+                <bold>RQ 1: How much climate resilience funding has St. Paul
+        received?</bold>
+              </p>
+              <p>The total amount of funding <bold>Minnesota</bold> received
+        for climate resilience as of June 2024 is
+        <bold>$7,101,423,527</bold></p>
+              <p>The total amount of funding <bold>St. Paul</bold> received
+        for climate resilience as of June 2024 is
+        <bold>$446,286,762</bold></p>
+              <p>St. Paul’s funding is <bold>6.28 %</bold> of Minnesota’s
+        total funding.</p>
+              <p>Almost <bold>95%</bold> of St. Paul’s funding goes to
+        transportation efforts. Clean energy, buildings and
+        manufacturing received less than <bold>2%</bold> of funding.</p>
+            </disp-quote>
+          </boxed-text>
+          <sec id="nb-code-cell-2-nb-article" specific-use="notebook-code">
+            <code language="r script"># Import data
+funding &lt;- read_csv(here("processed_data", "FundingSummary.csv"))</code>
+            <code language="r script">saveRDS(funding, here("processed_data", "funding.rds"))
+
+funding &lt;- readRDS(here("processed_data", "funding.rds"))</code>
+            <sec id="nb-code-cell-2-output-0-nb-article" specific-use="notebook-output">
+              <preformat>Warning: One or more parsing issues, call `problems()` on your data frame for details,
+e.g.:
+  dat &lt;- vroom(...)
+  problems(dat)</preformat>
+            </sec>
+            <sec id="nb-code-cell-2-output-1-nb-article" specific-use="notebook-output">
+              <preformat>Rows: 49535 Columns: 15
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (14): Agency Name, Bureau Name, Program Name, Category, Subcategory, Pro...
+dbl  (1): Unique ID
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</preformat>
+            </sec>
+          </sec>
+          <sec id="nb-code-cell-3-nb-article" specific-use="notebook-code">
+            <code language="r script">### Convert the `Funding Amount` to numeric and handling commas in the values
+
+funding &lt;- funding %&gt;%
+  mutate(`Funding Amount` = as.numeric(gsub(",", "", `Funding Amount`)))</code>
+            <sec id="nb-code-cell-3-output-0-nb-article" specific-use="notebook-output">
+              <preformat>Warning: There was 1 warning in `mutate()`.
+ℹ In argument: `Funding Amount = as.numeric(gsub(",", "", `Funding Amount`))`.
+Caused by warning:
+! NAs introduced by coercion</preformat>
+            </sec>
+          </sec>
+          <sec id="filter-for-mn-state-and-city-of-st.-paul-nb-article">
+            <title>Filter for MN State and City of St. Paul</title>
+            <p>First, I will filter the dataset by State:
+      <bold>Minnesota</bold>, and then narrow it down further to focus
+      on the <bold>City of St. Paul</bold> and the surrounding region.
+      Please note that St. Paul is part of the
+      <bold>Minneapolis-St. Paul-Bloomington, MN-WI</bold> region, so
+      I’ll ensure it’s included within that larger metropolitan
+      area.</p>
+            <sec id="nb-code-cell-4-nb-article" specific-use="notebook-code">
+              <code language="r script"># Filter for Minnesota funding
+minnesota_funding &lt;- funding %&gt;%
+  filter(State == "Minnesota")
+
+saveRDS(minnesota_funding, here("processed_data", "minnesota_funding.rds"))</code>
+            </sec>
+            <sec id="nb-code-cell-5-nb-article" specific-use="notebook-code">
+              <code language="r script"># Further filter for St. Paul, considering variations in city names
+st_paul_funding &lt;- minnesota_funding %&gt;%
+  filter(str_detect(City, regex("Saint Paul|St. Paul|South St. Paul|Minneapolis--St. Paul|Minneapolis-St. Paul", ignore_case = TRUE)))
+
+saveRDS(st_paul_funding, here("processed_data", "st_paul_funding.rds"))
+
+# glimpse(st_paul_funding)</code>
+            </sec>
+          </sec>
+          <sec id="calculate-funding-for-mn-state-and-city-of-st.-paul-nb-article">
+            <title>Calculate funding for MN State and City of St. Paul</title>
+            <sec id="nb-code-cell-6-nb-article" specific-use="notebook-code">
+              <code language="r script">minnesota_funding &lt;- readRDS(here("processed_data", "minnesota_funding.rds"))
+st_paul_funding &lt;- readRDS(here("processed_data", "st_paul_funding.rds"))
+
+# Calculate total funding for Minnesota
+total_minnesota_funding &lt;- minnesota_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE))
+
+cat("The total amount of funding Minnesota received for climate as of June 2024 is <!-- (F2ED4C6E)[nb-article]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/index.qmd -->quot;, 
+    format(total_minnesota_funding$total_funding, big.mark = ","), "\n")</code>
+              <code language="r script"># Calculate total funding for St. Paul
+total_st_paul_funding &lt;- st_paul_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE))
+
+cat("The total amount of funding St. Paul received for climate as of June 2024 is <!-- (F2ED4C6E)[nb-article]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/index.qmd -->quot;, 
+    format(total_st_paul_funding$total_funding, big.mark = ","), "\n")</code>
+              <sec id="nb-code-cell-6-output-0-nb-article" specific-use="notebook-output">
+                <preformat>The total amount of funding Minnesota received for climate as of June 2024 is $ 7,101,423,527 </preformat>
+              </sec>
+              <sec id="nb-code-cell-6-output-1-nb-article" specific-use="notebook-output">
+                <preformat>The total amount of funding St. Paul received for climate as of June 2024 is $ 446,286,762 </preformat>
+              </sec>
+            </sec>
+          </sec>
+          <sec id="calculate-fraction-of-st.-pauls-funding-from-mns-nb-article">
+            <title>Calculate fraction of St. Paul’s funding from MN’s</title>
+            <sec id="nb-code-cell-7-nb-article" specific-use="notebook-code">
+              <code language="r script">minnesota_funding &lt;- readRDS(here("processed_data", "minnesota_funding.rds"))
+st_paul_funding &lt;- readRDS(here("processed_data", "st_paul_funding.rds"))
+
+# Calculate total funding for Minnesota
+total_minnesota_funding &lt;- minnesota_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE)) %&gt;%
+  pull(total_funding)
+
+# Calculate total funding for St. Paul
+total_st_paul_funding &lt;- st_paul_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE)) %&gt;%
+  pull(total_funding)
+
+# Calculate the fraction of St. Paul's funding from Minnesota's total funding
+fraction_st_paul &lt;- total_st_paul_funding / total_minnesota_funding
+
+# Output the results
+cat("The fraction of St. Paul's funding from Minnesota's total funding is: ", 
+    round(fraction_st_paul, 4), "\n")</code>
+              <code language="r script">cat("This means St. Paul's funding is", round(fraction_st_paul * 100, 2), "% of Minnesota's total funding.\n")</code>
+              <sec id="nb-code-cell-7-output-0-nb-article" specific-use="notebook-output">
+                <preformat>The fraction of St. Paul's funding from Minnesota's total funding is:  0.0628 </preformat>
+              </sec>
+              <sec id="nb-code-cell-7-output-1-nb-article" specific-use="notebook-output">
+                <preformat>This means St. Paul's funding is 6.28 % of Minnesota's total funding.</preformat>
+              </sec>
+            </sec>
+          </sec>
+          <sec id="visualize-categories-of-funding-for-st.-paul-nb-article">
+            <title>Visualize categories of funding for St. Paul</title>
+            <sec id="nb-code-cell-8-nb-article" specific-use="notebook-code">
+              <code language="r script"># Group the St. Paul data by Category and calculate the total funding for each category
+st_paul_category_funding &lt;- st_paul_funding %&gt;%
+  group_by(Category) %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE)) %&gt;%
+  arrange(desc(total_funding))
+
+colors &lt;- brewer.pal(n = length(unique(st_paul_category_funding$Category)), "Set3")
+
+# Create an interactive bar chart using highcharter
+hchart_bar &lt;- highchart() %&gt;%
+  hc_chart(type = "bar") %&gt;%
+  hc_xAxis(categories = st_paul_category_funding$Category, title = list(text = "Category")) %&gt;%
+  hc_yAxis(title = list(text = "Total Funding ($)"), labels = list(format = "{value:,.0f}")) %&gt;%
+  hc_add_series(name = "Total Funding", 
+                data = st_paul_category_funding$total_funding, 
+                colorByPoint = TRUE, 
+                colors = colors) %&gt;%
+  hc_title(text = "Total Funding by Category in St. Paul") %&gt;%
+  hc_tooltip(pointFormat = "Total Funding: ${point.y:,.0f}") %&gt;%
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(contextButton = list(menuItems = c("downloadPNG", "downloadJPEG", "downloadSVG", "downloadPDF")))
+  )
+
+# Saving the chart as an HTML file
+saveWidget(hchart_bar, file = here("graphs", "st_paul_funding_bar.html"))</code>
+            </sec>
+            <p>A quick glance tells us that almost <bold>95%</bold> of
+      St. Paul’s funding goes to transportation efforts. Clean energy,
+      buildings and manufacturing received less than <bold>2%</bold> of
+      funding.</p>
+            <sec id="nb-code-cell-9-nb-article" specific-use="notebook-code">
+              <code language="r script"># Create an interactive pie chart using highcharter
+hchart_pie &lt;- highchart() %&gt;%
+  hc_chart(type = "pie") %&gt;%
+  hc_add_series(name = "Total Funding", 
+                data = list_parse2(st_paul_category_funding %&gt;% 
+                                   mutate(name = Category, y = total_funding)), 
+                colors = colors) %&gt;%
+  hc_title(text = "Total Funding by Category in St. Paul") %&gt;%
+  hc_tooltip(pointFormat = "Total Funding: ${point.y:,.0f}") %&gt;%
+  hc_plotOptions(pie = list(innerSize = '50%', dataLabels = list(enabled = TRUE))) %&gt;%
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(contextButton = list(menuItems = c("downloadPNG", "downloadJPEG", "downloadSVG", "downloadPDF")))
+  )
+
+saveWidget(hchart_pie, file = here("graphs", "st_paul_funding_pie.html"))</code>
+            </sec>
+            <sec id="nb-code-cell-10-nb-article" specific-use="notebook-code">
+              <code language="r script">## Export the funding data to CSV for graphing
+write.csv(minnesota_funding, here("processed_data", "minnesota_funding.csv"), row.names = FALSE)
+write.csv(st_paul_funding, here("processed_data", "st_paul_funding.csv"), row.names = FALSE)</code>
+            </sec>
+          </sec>
+        </sec>
+        <sec id="types-of-green-jobs-in-st.-paul-nb-article">
+          <title>2. Types of Green Jobs in St. Paul</title>
+        </sec>
+        <sec id="quality-pay-and-qualifications-of-green-jobs-nb-article">
+          <title>3. Quality, Pay, and Qualifications of Green Jobs</title>
+        </sec>
+        <sec id="demographics-of-green-job-recipients-nb-article">
+          <title>4. Demographics of Green Job Recipients</title>
+        </sec>
+      </sec>
+    </body>
+    <back>
+</back>
+  </sub-article>
+  <!-- (F2ED4C6E)[nb-1]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/St. Paul Green Jobs - ACS.ipynb -->
+  <!-- (F2ED4C6E)[nb-2]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/National Green Jobs - ACS - Raw.ipynb -->
+  <!-- (F2ED4C6E)[nb-3]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/St. Paul Green Jobs - OEWS.ipynb -->
+  <!-- (F2ED4C6E)[nb-4]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/St. Paul Green Jobs - Jobs.ipynb -->
+  <!-- (F2ED4C6E)[nb-5]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/OWES+O_NET - St-Paul.ipynb -->
+  <!-- (F2ED4C6E)[nb-6]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/National Green Jobs - ACS - Processed.ipynb -->
+  <!-- (F2ED4C6E)[nb-7]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/OWES+O_NET - National.ipynb -->
+</article>
