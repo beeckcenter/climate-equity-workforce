@@ -1,0 +1,2068 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving
+and Interchange DTD v1.2 20190208//EN" "JATS-archivearticle1.dtd">
+
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.2" article-type="other">
+
+<front>
+<journal-meta>
+<journal-id></journal-id>
+
+<journal-title-group>
+<journal-title>Beeck Center for Social Impact and
+Innovation</journal-title>
+</journal-title-group>
+<issn></issn>
+
+<publisher>
+<publisher-name></publisher-name>
+</publisher>
+</journal-meta>
+
+
+<article-meta>
+
+
+<title-group>
+<article-title>Climate resilience requires equitable access to quality
+green energy jobs. The City of Saint Paul is at the
+forefront.</article-title>
+</title-group>
+
+<contrib-group>
+<contrib contrib-type="author" corresp="yes">
+<name>
+<surname>Ali</surname>
+<given-names>Elham</given-names>
+</name>
+<string-name>Elham Ali</string-name>
+
+<email>elham.ali@georgetown.edu</email>
+<role>Researcher</role>
+<role>Data Storytelling</role>
+<role>Human-centered Design</role>
+<role>Data Visualization</role>
+<xref ref-type="aff" rid="aff-1">a</xref>
+<xref ref-type="corresp" rid="cor-1">&#x002A;</xref>
+</contrib>
+</contrib-group>
+<aff id="aff-1">
+<institution-wrap>
+<institution>Beeck Center for Social Impact and Innovation at Georgetown
+University</institution>
+</institution-wrap>
+
+
+
+
+
+
+
+</aff>
+<author-notes>
+<corresp id="cor-1">elham.ali@georgetown.edu</corresp>
+</author-notes>
+
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-09-19">
+<year>2024</year>
+<month>9</month>
+<day>19</day>
+</pub-date>
+
+
+
+
+
+
+
+<history></history>
+
+<permissions>
+
+<license license-type="creative-commons">
+<ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/">https://creativecommons.org/licenses/by-sa/4.0/</ali:license_ref>
+
+</license>
+</permissions>
+
+<abstract>
+<p>Minnesota, particularly the City of Saint Paul, has seen a surge in
+climate resilience funding aimed at expanding green energy job
+opportunities. However, BIPOC communities remain underrepresented in
+these jobs and disproportionately suffer from the adverse effects of
+human-driven climate change.</p>
+</abstract>
+<kwd-group kwd-group-type="author">
+<kwd>climate justice</kwd>
+<kwd>climate-ready workforce</kwd>
+<kwd>green jobs</kwd>
+<kwd>climate change</kwd>
+<kwd>equity</kwd>
+</kwd-group>
+
+
+
+
+</article-meta>
+
+</front>
+
+<body>
+<sec id="background">
+  <title>Background</title>
+  <p>This analysis looks at access to green energy jobs (like energy
+  efficiency, renewable energy, and green construction) by
+  race/ethnicity, gender, education, and income in St. Paul, Minnesota,
+  USA.</p>
+</sec>
+<sec id="questions">
+  <title>Questions</title>
+  <p>Here are some of the questions I will explore using different
+  datasets:</p>
+  <list list-type="bullet">
+    <list-item>
+      <p>How much climate resilience funding has St. Paul received?</p>
+    </list-item>
+    <list-item>
+      <p>What specific green jobs are being created in St. Paul (e.g.,
+      energy efficiency, renewable energy, green construction)?</p>
+    </list-item>
+    <list-item>
+      <p>What is the quality of these jobs? How much do they pay? What
+      qualifications are needed (education and experience)?</p>
+    </list-item>
+    <list-item>
+      <p>Who is getting these jobs, based on education, race/ethnicity,
+      gender, and income levels?</p>
+    </list-item>
+  </list>
+</sec>
+<sec id="data-sources">
+  <title>Data Sources</title>
+  <p>The data for this project comes from:</p>
+  <list list-type="bullet">
+    <list-item>
+      <p>The National Center for O*NET Development</p>
+    </list-item>
+    <list-item>
+      <p>2023 Occupational Employment and Wage Survey</p>
+    </list-item>
+    <list-item>
+      <p>Urban Institute 11 elements of job quality: Clean Energy Job
+      Quality and Education Data</p>
+    </list-item>
+    <list-item>
+      <p>National and local demographic data from the 2022 American
+      Community Survey Public Use Microdata Sample (ACS PUMS)</p>
+    </list-item>
+    <list-item>
+      <p>US Census Bureau’s 2023 QuickFacts tool</p>
+    </list-item>
+    <list-item>
+      <p>Invest.gov</p>
+    </list-item>
+    <list-item>
+      <p>Geocorr from the Missouri Census Data Center</p>
+    </list-item>
+  </list>
+  <p>I will reduce each large dataset to focus only on questions related
+  to green jobs and job quality. Please note that some datasets have
+  already been pre-processed in Python with specific filters applied.
+  You can find the original raw datasets in the data folder for
+  reference.</p>
+</sec>
+<sec id="analysis">
+  <title>Analysis</title>
+  <p>I will look at each question one by one and clean the data as I go.
+  Some datasets might need to be combined, so I will organize the data
+  during the analysis before exploring the results.</p>
+  <sec id="load-packages-and-libraries">
+    <title>Load packages and libraries</title>
+    <code language="r script">## For folder structure
+library(here)</code>
+    <preformat>here() starts at /Users/elhamali/Documents/Data Projects/climate-equity-workforce</preformat>
+    <code language="r script">library(ezknitr)
+
+## For data import/cleaning
+library(tidyverse)</code>
+    <preformat>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     </preformat>
+    <preformat>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</preformat>
+    <code language="r script">library(purrr)
+library(rlang)</code>
+    <preformat>
+Attaching package: 'rlang'
+
+The following objects are masked from 'package:purrr':
+
+    %@%, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl,
+    flatten_raw, invoke, splice</preformat>
+    <code language="r script">library(forcats)
+library(readxl)
+
+## For graphing
+library(highcharter)</code>
+    <preformat>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo </preformat>
+    <code language="r script">library(igraph)</code>
+    <preformat>
+Attaching package: 'igraph'
+
+The following object is masked from 'package:rlang':
+
+    is_named
+
+The following objects are masked from 'package:lubridate':
+
+    %--%, union
+
+The following objects are masked from 'package:dplyr':
+
+    as_data_frame, groups, union
+
+The following objects are masked from 'package:purrr':
+
+    compose, simplify
+
+The following object is masked from 'package:tidyr':
+
+    crossing
+
+The following object is masked from 'package:tibble':
+
+    as_data_frame
+
+The following objects are masked from 'package:stats':
+
+    decompose, spectrum
+
+The following object is masked from 'package:base':
+
+    union</preformat>
+    <code language="r script">library(RColorBrewer)
+library(htmlwidgets)
+library(gt)
+# library(viridis)</code>
+  </sec>
+  <sec id="climate-resilience-funding-for-st.-paul">
+    <title>1. Climate Resilience Funding for St. Paul</title>
+    <boxed-text>
+    <p><bold>RQ 1: How much climate resilience funding has the City of
+    Saint Paul received?</bold></p>
+    <p>As of June 2024, <bold>Minnesota</bold> received a total of
+    $7,101,423,527 in funding for climate resilience, while
+    <bold>St. Paul</bold> received $446,286,762. Specifically, as of
+    January 2024, St. Paul has secured $433,028,012 from the Bipartisan
+    Infrastructure Law (BIL) and $13,258,750 from the Inflation
+    Reduction Act (IRA) for <bold>climate resilience efforts.</bold></p>
+    <p>St. Paul’s funding makes up <bold>6.28%</bold> of Minnesota’s
+    total climate resilience funding. Nearly <bold>95% of St. Paul’s
+    funding i</bold>s allocated to <bold>transportation</bold>
+    <bold>projects</bold>, with clean energy, buildings, and
+    manufacturing receiving <bold>less than 2% of the total</bold>. It’s
+    like filling up a swimming pool with water but using only a small 8
+    oz glass for clean energy, buildings, and manufacturing.</p>
+    <p>As of January 2024, St. Paul received <bold>$8,337,843 from the
+    BIL</bold> and <bold>$200,000 from the IRA</bold> specifically for
+    investments in clean energy, buildings, and manufacturing.</p>
+    </boxed-text>
+    <code language="r script"># Import data
+funding &lt;- read_csv(here(&quot;processed_data&quot;, &quot;FundingSummary.csv&quot;))</code>
+    <preformat>Warning: One or more parsing issues, call `problems()` on your data frame for details,
+e.g.:
+  dat &lt;- vroom(...)
+  problems(dat)</preformat>
+    <preformat>Rows: 49535 Columns: 15
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (14): Agency Name, Bureau Name, Program Name, Category, Subcategory, Pro...
+dbl  (1): Unique ID
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</preformat>
+    <code language="r script">saveRDS(funding, here(&quot;processed_data&quot;, &quot;funding.rds&quot;))
+
+funding &lt;- readRDS(here(&quot;processed_data&quot;, &quot;funding.rds&quot;))</code>
+    <code language="r script">### Convert the `Funding Amount` to numeric and handling commas in the values
+
+funding &lt;- funding %&gt;%
+  mutate(`Funding Amount` = as.numeric(gsub(&quot;,&quot;, &quot;&quot;, `Funding Amount`)))</code>
+    <preformat>Warning: There was 1 warning in `mutate()`.
+ℹ In argument: `Funding Amount = as.numeric(gsub(&quot;,&quot;, &quot;&quot;, `Funding Amount`))`.
+Caused by warning:
+! NAs introduced by coercion</preformat>
+    <sec id="filter-for-mn-state-and-city-of-st.-paul">
+      <title>Filter for MN State and City of St. Paul</title>
+      <p>First, I will filter the dataset by State:
+      <bold>Minnesota</bold>, and then narrow it down further to focus
+      on the <bold>City of St. Paul</bold> and the surrounding region.
+      Please note that St. Paul is part of the
+      <bold>Minneapolis-St. Paul-Bloomington, MN-WI</bold> region, so
+      I’ll ensure it’s included within that larger metropolitan
+      area.</p>
+      <code language="r script"># Filter for Minnesota funding
+minnesota_funding &lt;- funding %&gt;%
+  filter(State == &quot;Minnesota&quot;)
+
+saveRDS(minnesota_funding, here(&quot;processed_data&quot;, &quot;minnesota_funding.rds&quot;))</code>
+      <code language="r script"># Further filter for St. Paul, considering variations in city names
+st_paul_funding &lt;- minnesota_funding %&gt;%
+  filter(str_detect(City, regex(&quot;Saint Paul|St. Paul|South St. Paul|Minneapolis--St. Paul|Minneapolis-St. Paul&quot;, ignore_case = TRUE)))
+
+saveRDS(st_paul_funding, here(&quot;processed_data&quot;, &quot;st_paul_funding.rds&quot;))
+
+# glimpse(st_paul_funding)</code>
+    </sec>
+    <sec id="calculate-funding-for-mn-state-and-city-of-st.-paul">
+      <title>Calculate funding for MN State and City of St. Paul</title>
+      <code language="r script"># Set options to avoid scientific notation
+options(scipen = 999)
+
+# Load Minnesota and St. Paul data
+minnesota_funding &lt;- readRDS(here(&quot;processed_data&quot;, &quot;minnesota_funding.rds&quot;))
+st_paul_funding &lt;- readRDS(here(&quot;processed_data&quot;, &quot;st_paul_funding.rds&quot;))
+
+# Calculate total funding for Minnesota
+total_minnesota_funding &lt;- minnesota_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE))
+
+cat(&quot;The total amount of funding Minnesota received for climate as of June 2024 is $&quot;, 
+    format(total_minnesota_funding$total_funding, big.mark = &quot;,&quot;), &quot;\n&quot;)</code>
+      <preformat>The total amount of funding Minnesota received for climate as of June 2024 is $ 7,101,423,527 </preformat>
+      <code language="r script"># Calculate total funding for St. Paul
+total_st_paul_funding &lt;- st_paul_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE))
+
+cat(&quot;The total amount of funding St. Paul received for climate as of June 2024 is $&quot;, 
+    format(total_st_paul_funding$total_funding, big.mark = &quot;,&quot;), &quot;\n&quot;)</code>
+      <preformat>The total amount of funding St. Paul received for climate as of June 2024 is $ 446,286,762 </preformat>
+      <code language="r script"># Calculate total funds by funding source for St. Paul
+source_st_paul_funding &lt;- st_paul_funding %&gt;%
+  group_by(`Funding Source`) %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE))
+
+# Calculate specific totals for BIL and IRA
+bil_funding &lt;- st_paul_funding %&gt;%
+  filter(`Funding Source` == &quot;BIL&quot;) %&gt;%
+  summarise(total_bil = sum(`Funding Amount`, na.rm = TRUE))
+
+ira_funding &lt;- st_paul_funding %&gt;%
+  filter(`Funding Source` == &quot;IRA&quot;) %&gt;%
+  summarise(total_ira = sum(`Funding Amount`, na.rm = TRUE))
+
+# Print specific funding from BIL and IRA
+cat(&quot;As of January 2024, St. Paul has been allocated $&quot;, 
+    format(bil_funding$total_bil, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot; from the Bipartisan Infrastructure Law (BIL) and $&quot;, 
+    format(ira_funding$total_ira, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot; from the Inflation Reduction Act (IRA).\n&quot;)</code>
+      <preformat>As of January 2024, St. Paul has been allocated $ 433,028,012  from the Bipartisan Infrastructure Law (BIL) and $ 13,258,750  from the Inflation Reduction Act (IRA).</preformat>
+      <code language="r script"># Filter for the specific category 'Clean Energy, Buildings, and Manufacturing'
+st_paul_clean_energy_funding &lt;- st_paul_funding %&gt;%
+  filter(Category == &quot;Clean Energy, Buildings, and Manufacturing&quot;)
+
+# Calculate total funds by funding source for the specific category
+source_st_paul_clean_energy_funding &lt;- st_paul_clean_energy_funding %&gt;%
+  group_by(`Funding Source`) %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE))
+
+# Calculate total funding across all sources for the specific category
+total_st_paul_clean_energy_funding &lt;- st_paul_clean_energy_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE))
+
+# Calculate specific totals for BIL and IRA in the specific category
+bil_clean_energy_funding &lt;- st_paul_clean_energy_funding %&gt;%
+  filter(`Funding Source` == &quot;BIL&quot;) %&gt;%
+  summarise(total_bil = sum(`Funding Amount`, na.rm = TRUE))
+
+ira_clean_energy_funding &lt;- st_paul_clean_energy_funding %&gt;%
+  filter(`Funding Source` == &quot;IRA&quot;) %&gt;%
+  summarise(total_ira = sum(`Funding Amount`, na.rm = TRUE))
+
+# Print the total amount of funding for the specific category
+cat(&quot;The total amount of funding St. Paul received for 'Clean Energy, Buildings, and Manufacturing' as of June 2024 is $&quot;, 
+    format(total_st_paul_clean_energy_funding$total_funding, big.mark = &quot;,&quot;), &quot;\n&quot;)</code>
+      <preformat>The total amount of funding St. Paul received for 'Clean Energy, Buildings, and Manufacturing' as of June 2024 is $ 8,537,843 </preformat>
+      <code language="r script"># Print specific funding from BIL and IRA for the specific category
+cat(&quot;As of January 2024, St. Paul has been allocated $&quot;, 
+    format(bil_clean_energy_funding$total_bil, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot; from the Bipartisan Infrastructure Law (BIL) and $&quot;, 
+    format(ira_clean_energy_funding$total_ira, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot; from the Inflation Reduction Act (IRA) to invest in 'Clean Energy, Buildings, and Manufacturing'.\n&quot;)</code>
+      <preformat>As of January 2024, St. Paul has been allocated $ 8,337,843  from the Bipartisan Infrastructure Law (BIL) and $ 200,000  from the Inflation Reduction Act (IRA) to invest in 'Clean Energy, Buildings, and Manufacturing'.</preformat>
+      <p>As of January 2024, St. Paul has been allocated $ 433,028,012
+      million from the Bipartisan Infrastructure Law (BIL) and $
+      13,258,750 from the Inflation Reduction Act (IRA) to invest in
+      climate resilience efforts in total.</p>
+      <p>As of January 2024, St. Paul has been allocated $ 8,337,843
+      million from the Bipartisan Infrastructure Law (BIL) and $ 200,000
+      from the Inflation Reduction Act (IRA) to invest in ‘Clean Energy,
+      Buildings, and Manufacturing’.</p>
+    </sec>
+    <sec id="calculate-fraction-of-st.-pauls-funding-from-mns">
+      <title>Calculate fraction of St. Paul’s funding from MN’s</title>
+      <code language="r script">minnesota_funding &lt;- readRDS(here(&quot;processed_data&quot;, &quot;minnesota_funding.rds&quot;))
+st_paul_funding &lt;- readRDS(here(&quot;processed_data&quot;, &quot;st_paul_funding.rds&quot;))
+
+# Calculate total funding for Minnesota
+total_minnesota_funding &lt;- minnesota_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE)) %&gt;%
+  pull(total_funding)
+
+# Calculate total funding for St. Paul
+total_st_paul_funding &lt;- st_paul_funding %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE)) %&gt;%
+  pull(total_funding)
+
+# Calculate the fraction of St. Paul's funding from Minnesota's total funding
+fraction_st_paul &lt;- total_st_paul_funding / total_minnesota_funding
+
+# Output the results
+cat(&quot;The fraction of St. Paul's funding from Minnesota's total funding is: &quot;, 
+    round(fraction_st_paul, 4), &quot;\n&quot;)</code>
+      <preformat>The fraction of St. Paul's funding from Minnesota's total funding is:  0.0628 </preformat>
+      <code language="r script">cat(&quot;This means St. Paul's funding is&quot;, round(fraction_st_paul * 100, 2), &quot;% of Minnesota's total funding.\n&quot;)</code>
+      <preformat>This means St. Paul's funding is 6.28 % of Minnesota's total funding.</preformat>
+    </sec>
+    <sec id="visualize-categories-of-funding-for-st.-paul">
+      <title>Visualize categories of funding for St. Paul</title>
+      <code language="r script"># Group the St. Paul data by Category and calculate the total funding for each category
+st_paul_category_funding &lt;- st_paul_funding %&gt;%
+  group_by(Category) %&gt;%
+  summarise(total_funding = sum(`Funding Amount`, na.rm = TRUE)) %&gt;%
+  arrange(desc(total_funding))
+
+colors &lt;- brewer.pal(n = length(unique(st_paul_category_funding$Category)), &quot;Set3&quot;)
+
+# Create an interactive bar chart using highcharter
+hchart_bar &lt;- highchart() %&gt;%
+  hc_chart(type = &quot;bar&quot;) %&gt;%
+  hc_xAxis(categories = st_paul_category_funding$Category, title = list(text = &quot;Category&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Total Funding ($)&quot;), labels = list(format = &quot;{value:,.0f}&quot;)) %&gt;%
+  hc_add_series(name = &quot;Total Funding&quot;, 
+                data = st_paul_category_funding$total_funding, 
+                colorByPoint = TRUE, 
+                colors = colors) %&gt;%
+  hc_title(text = &quot;Total Funding by Category in St. Paul&quot;) %&gt;%
+  hc_tooltip(pointFormat = &quot;Total Funding: ${point.y:,.0f}&quot;) %&gt;%
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(contextButton = list(menuItems = c(&quot;downloadPNG&quot;, &quot;downloadJPEG&quot;, &quot;downloadSVG&quot;, &quot;downloadPDF&quot;)))
+  )
+
+# Saving the chart as an HTML file
+saveWidget(hchart_bar, file = here(&quot;graphs&quot;, &quot;st_paul_funding_bar.html&quot;))</code>
+      <p>A quick glance tells us that almost <bold>95%</bold> of
+      St. Paul’s funding goes to transportation efforts. Clean energy,
+      buildings and manufacturing received less than <bold>2%</bold> of
+      funding.</p>
+      <code language="r script"># Create an interactive pie chart using highcharter
+hchart_pie &lt;- highchart() %&gt;%
+  hc_chart(type = &quot;pie&quot;) %&gt;%
+  hc_add_series(name = &quot;Total Funding&quot;, 
+                data = list_parse2(st_paul_category_funding %&gt;% 
+                                   mutate(name = Category, y = total_funding)), 
+                colors = colors) %&gt;%
+  hc_title(text = &quot;Total Funding by Category in St. Paul&quot;) %&gt;%
+  hc_tooltip(pointFormat = &quot;Total Funding: ${point.y:,.0f}&quot;) %&gt;%
+  hc_plotOptions(pie = list(innerSize = '50%', dataLabels = list(enabled = TRUE))) %&gt;%
+  hc_exporting(
+    enabled = TRUE,
+    buttons = list(contextButton = list(menuItems = c(&quot;downloadPNG&quot;, &quot;downloadJPEG&quot;, &quot;downloadSVG&quot;, &quot;downloadPDF&quot;)))
+  )
+
+saveWidget(hchart_pie, file = here(&quot;graphs&quot;, &quot;st_paul_funding_pie.html&quot;))</code>
+      <code language="r script">## Export the funding data to CSV for graphing
+write.csv(minnesota_funding, here(&quot;processed_data&quot;, &quot;minnesota_funding.csv&quot;), row.names = FALSE)
+write.csv(st_paul_funding, here(&quot;processed_data&quot;, &quot;st_paul_funding.csv&quot;), row.names = FALSE)</code>
+    </sec>
+  </sec>
+  <sec id="types-of-green-jobs-in-st.-paul">
+    <title>2. Types of Green Jobs in St. Paul</title>
+    <boxed-text>
+    <p><bold>RQ 2: What specific green jobs are being created in the
+    Minneapolis-Saint Paul metropolitan area and nationally (e.g.,
+    energy efficiency, renewable energy, green construction)?</bold></p>
+    <p><underline>Nationally</underline></p>
+    <p>There’s a total of <bold>17,119,730 employed people</bold> in
+    green jobs nationally. Specifically, in <bold>Energy
+    Efficiency</bold>, there are 4,928,520 (28.79 %), in <bold>Green
+    Construction</bold> there are 10,624,140 (62.06 %), and in
+    <bold>Renewable Energy Generation</bold> there are 1,567,070 (9.15
+    %).</p>
+    <p>The <bold>mean annual wage</bold> for the occupation in U.S.
+    dollars for green jobs is $78,363.4, and for non-green jobs is
+    $73,763.67. That means green jobs pay <bold>$4,599.73 more</bold>
+    than non-green jobs <bold>nationally</bold>.</p>
+    <p>The <bold>mean hourly wage</bold> for the occupation in U.S.
+    dollars for green jobs is $37.67547, and for non-green jobs is
+    $34.80. That means green jobs pay <bold>$2.88 more</bold> than
+    non-green jobs <bold>nationally</bold>.</p>
+    <p><underline>Minneapolis-Saint Paul Metropolitan
+    Area</underline></p>
+    <p>There’s a total of <bold>214,340 employed people</bold> in green
+    jobs in the Minneapolis-Saint Paul metropolitan area. Specifically,
+    in <bold>Energy Efficiency</bold>, there are 66,410 ( 30.98 %), in
+    <bold>Green Construction</bold> there are 124,680 ( 58.17 %), and in
+    <bold>Renewable Energy Generation</bold> there are 23,250 ( 10.85
+    %).</p>
+    <p>The <bold>mean annual wage</bold> for the occupation in U.S.
+    dollars for green jobs <bold>in this area</bold> is $84,561.7, and
+    for non-green jobs is $77,192.53. That means green jobs in Saint
+    Paul pay $7,369.169 more than non-green jobs in this area.</p>
+    <p>The <bold>mean hourly wage</bold> for the occupation in U.S.
+    dollars for green jobs <bold>in this area</bold> is $40.65, and for
+    non-green jobs is $36.31. That means green jobs in Saint Paul pay
+    <bold>$4.35 more</bold> than non-green jobs in this area.</p>
+    </boxed-text>
+    <sec id="green-jobs-nationally">
+      <title>Green jobs nationally</title>
+      <code language="r script"># Import national jobs data
+national_jobs &lt;- read_csv(here(&quot;processed_data&quot;, &quot;OWES_and_ONET-National.csv&quot;))</code>
+      <preformat>Rows: 1420 Columns: 34
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (21): AREA_TITLE, PRIM_STATE, NAICS_TITLE, I_GROUP, OCC_CODE, OCC_TITLE,...
+dbl  (7): AREA, AREA_TYPE, NAICS, OWN_CODE, TOT_EMP, EMP_PRSE, MEAN_PRSE
+lgl  (6): JOBS_1000, LOC_QUOTIENT, PCT_TOTAL, PCT_RPT, ANNUAL, HOURLY
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</preformat>
+      <code language="r script">saveRDS(national_jobs, here(&quot;processed_data&quot;, &quot;national_jobs.rds&quot;))
+
+national_jobs  &lt;- readRDS(here(&quot;processed_data&quot;, &quot;national_jobs.rds&quot;))</code>
+      <p>Here, we’d want to filter to only green jobs</p>
+      <code language="r script"># Convert necessary columns to numeric where needed
+national_jobs &lt;- national_jobs %&gt;%
+  mutate(
+    TOT_EMP = as.numeric(TOT_EMP),
+    # JOBS_1000 = as.numeric(JOBS_1000),
+    # PCT_TOTAL = as.numeric(PCT_TOTAL),
+    H_MEAN = as.numeric(H_MEAN),
+    A_MEAN = as.numeric(A_MEAN),
+    A_MEDIAN = as.numeric(A_MEDIAN),
+    H_MEDIAN = as.numeric(H_MEDIAN)
+  )</code>
+      <preformat>Warning: There were 4 warnings in `mutate()`.
+The first warning was:
+ℹ In argument: `H_MEAN = as.numeric(H_MEAN)`.
+Caused by warning:
+! NAs introduced by coercion
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.</preformat>
+      <code language="r script"># Filter the dataset to include only relevant sectors
+filtered_jobs &lt;- national_jobs %&gt;%
+  filter(`O*NET-SOC Sector` %in% c(&quot;Energy Efficiency&quot;, &quot;Renewable Energy Generation&quot;, &quot;Green Construction&quot;))
+
+# Function to summarize data for each sector
+summarize_by_sector &lt;- function(df) {
+  df %&gt;%
+    summarize(
+      TOT_EMP = sum(TOT_EMP, na.rm = TRUE),
+      # JOBS_1000 = sum(JOBS_1000 * TOT_EMP, na.rm = TRUE) / sum(TOT_EMP, na.rm = TRUE),
+      # PCT_TOTAL = sum(PCT_TOTAL * TOT_EMP, na.rm = TRUE) / sum(TOT_EMP, na.rm = TRUE),
+      H_MEAN = mean(H_MEAN, na.rm = TRUE),
+      A_MEAN = mean(A_MEAN, na.rm = TRUE),
+      A_MEDIAN = median(A_MEDIAN, na.rm = TRUE),
+      H_MEDIAN = median(H_MEDIAN, na.rm = TRUE)
+    )
+}
+
+# Summarize the data for each sector and overall
+sector_summary &lt;- filtered_jobs %&gt;%
+  group_by(`O*NET-SOC Sector`) %&gt;%
+  summarize_by_sector()
+
+# Calculate the summary for all sectors combined
+overall_summary &lt;- filtered_jobs %&gt;%
+  summarize_by_sector()
+
+# Combine the results: sector-wise and overall
+final_summary &lt;- bind_rows(sector_summary, tibble(`O*NET-SOC Sector` = &quot;All&quot;, overall_summary))
+
+# Save the final summary as an RDS file and CSV for future reference
+saveRDS(final_summary, here(&quot;processed_data&quot;, &quot;sector_summary.rds&quot;))
+write_csv(final_summary, here(&quot;processed_data&quot;, &quot;sector_summary.csv&quot;))
+
+# Output the final summary to the user
+print(final_summary)</code>
+      <preformat># A tibble: 4 × 6
+  `O*NET-SOC Sector`           TOT_EMP H_MEAN A_MEAN A_MEDIAN H_MEDIAN
+  &lt;chr&gt;                          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 Energy Efficiency            4928520   43.0 89371     86355     41.5
+2 Green Construction          10624140   33.9 70506.    60165     28.9
+3 Renewable Energy Generation  1567070   42.3 88028.    97010     46.6
+4 All                         17119730   37.7 78363.    67640     32.5</preformat>
+      <code language="r script"># Calculate total employment and sector percentages
+total_green_jobs &lt;- final_summary %&gt;% filter(`O*NET-SOC Sector` == &quot;All&quot;) %&gt;% pull(TOT_EMP)
+
+energy_efficiency_jobs &lt;- final_summary %&gt;% filter(`O*NET-SOC Sector` == &quot;Energy Efficiency&quot;) %&gt;% pull(TOT_EMP)
+green_construction_jobs &lt;- final_summary %&gt;% filter(`O*NET-SOC Sector` == &quot;Green Construction&quot;) %&gt;% pull(TOT_EMP)
+renewable_energy_jobs &lt;- final_summary %&gt;% filter(`O*NET-SOC Sector` == &quot;Renewable Energy Generation&quot;) %&gt;% pull(TOT_EMP)
+
+# Calculate the percentages
+energy_efficiency_pct &lt;- round((energy_efficiency_jobs / total_green_jobs) * 100, 2)
+green_construction_pct &lt;- round((green_construction_jobs / total_green_jobs) * 100, 2)
+renewable_energy_pct &lt;- round((renewable_energy_jobs / total_green_jobs) * 100, 2)
+
+# Create the concatenated sentence
+cat(&quot;There's a total of&quot;, format(total_green_jobs, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;employed people in green jobs nationally. Specifically, in Energy Efficiency, there are&quot;, 
+    format(energy_efficiency_jobs, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;(&quot;, energy_efficiency_pct, &quot;%), in Green Construction there are&quot;, 
+    format(green_construction_jobs, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;(&quot;, green_construction_pct, &quot;%), and in Renewable Energy Generation there are&quot;, 
+    format(renewable_energy_jobs, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;(&quot;, renewable_energy_pct, &quot;%).\n&quot;)</code>
+      <preformat>There's a total of 17,119,730 employed people in green jobs nationally. Specifically, in Energy Efficiency, there are 4,928,520 ( 28.79 %), in Green Construction there are 10,624,140 ( 62.06 %), and in Renewable Energy Generation there are 1,567,070 ( 9.15 %).</preformat>
+      <p>Let’s visualize this so it’s easier to compare across all green
+      sectors</p>
+      <code language="r script"># Convert the O*NET-SOC Sector to a factor for ordering in the chart
+final_summary &lt;- final_summary %&gt;%
+  mutate(`O*NET-SOC Sector` = factor(`O*NET-SOC Sector`, levels = c(&quot;Energy Efficiency&quot;, &quot;Green Construction&quot;, &quot;Renewable Energy Generation&quot;, &quot;All&quot;)))
+
+# Visualizing TOT_EMP across the sectors
+hchart(final_summary, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = TOT_EMP)) %&gt;%
+  hc_title(text = &quot;Total Employment by Sector&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Total Employment&quot;), labels = list(format = &quot;{value:,0f}&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:,0f}&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-13-1.png" />
+      <code language="r script"># Visualizing H_MEAN (Mean Hourly Wage) across the sectors
+hchart(final_summary, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = H_MEAN)) %&gt;%
+  hc_title(text = &quot;Mean Hourly Wage by Sector&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Mean Hourly Wage (USD)&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:.2f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-13-2.png" />
+      <code language="r script"># Visualizing A_MEAN (Mean Annual Wage) across the sectors
+hchart(final_summary, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = A_MEAN)) %&gt;%
+  hc_title(text = &quot;Mean Annual Wage by Sector&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Mean Annual Wage (USD)&quot;), labels = list(format = &quot;{value:,0f}&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:,0f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-13-3.png" />
+      <code language="r script"># Visualizing A_MEDIAN (Median Annual Wage) across the sectors
+hchart(final_summary, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = A_MEDIAN)) %&gt;%
+  hc_title(text = &quot;Median Annual Wage by Sector&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Median Annual Wage (USD)&quot;), labels = list(format = &quot;{value:,0f}&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:,0f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-13-4.png" />
+      <code language="r script"># Visualizing H_MEDIAN (Median Hourly Wage) across the sectors
+hchart(final_summary, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = H_MEDIAN)) %&gt;%
+  hc_title(text = &quot;Median Hourly Wage by Sector&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Median Hourly Wage (USD)&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:.2f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-13-5.png" />
+      <p>I’m also curious about the differences between green jobs and
+      non-green jobs for mean hourly wage and mean annual wage.</p>
+      <code language="r script"># Define green jobs as sectors related to energy and construction
+green_jobs_sectors &lt;- c(&quot;Energy Efficiency&quot;, &quot;Renewable Energy Generation&quot;, &quot;Green Construction&quot;)
+
+# Add a new column to identify green and non-green jobs
+national_jobs &lt;- national_jobs %&gt;%
+  mutate(
+    Job_Type = ifelse(`O*NET-SOC Sector` %in% green_jobs_sectors, &quot;Green Jobs&quot;, &quot;Non-Green Jobs&quot;)
+  )
+
+# Group by job type (Green vs Non-Green) and calculate mean wages
+job_type_summary &lt;- national_jobs %&gt;%
+  group_by(Job_Type) %&gt;%
+  summarize(
+    H_MEAN = mean(H_MEAN, na.rm = TRUE),
+    A_MEAN = mean(A_MEAN, na.rm = TRUE)
+  )
+
+# Visualizing Mean Hourly Wage (H_MEAN) for Green vs Non-Green Jobs
+hchart(job_type_summary, &quot;column&quot;, hcaes(x = Job_Type, y = H_MEAN)) %&gt;%
+  hc_title(text = &quot;Mean Hourly Wage: Green Jobs vs Non-Green Jobs&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Job Type&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Mean Hourly Wage (USD)&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:.2f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-14-1.png" />
+      <code language="r script"># Visualizing Mean Annual Wage (A_MEAN) for Green vs Non-Green Jobs
+hchart(job_type_summary, &quot;column&quot;, hcaes(x = Job_Type, y = A_MEAN)) %&gt;%
+  hc_title(text = &quot;Mean Annual Wage: Green Jobs vs Non-Green Jobs&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Job Type&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Mean Annual Wage (USD)&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:,0f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-14-2.png" />
+      <code language="r script"># Summarizing core findings nationally
+
+# Extract green and non-green job wage data
+green_wages &lt;- job_type_summary %&gt;% filter(Job_Type == &quot;Green Jobs&quot;)
+non_green_wages &lt;- job_type_summary %&gt;% filter(Job_Type == &quot;Non-Green Jobs&quot;)
+
+# Calculate the difference between green and non-green jobs
+difference_annual &lt;- green_wages$A_MEAN - non_green_wages$A_MEAN
+difference_hourly &lt;- green_wages$H_MEAN - non_green_wages$H_MEAN
+
+# Format and print the sentences
+cat(&quot;The mean annual wage for the occupation in U.S. dollars for green jobs is $&quot;, 
+    format(green_wages$A_MEAN, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;, and for non-green jobs is $&quot;, 
+    format(non_green_wages$A_MEAN, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;. That means green jobs pay $&quot;, 
+    format(abs(difference_annual), big.mark = &quot;,&quot;, scientific = FALSE), 
+    ifelse(difference_annual &gt; 0, &quot; more&quot;, &quot; less&quot;), 
+    &quot; than non-green jobs nationally.\n&quot;, sep = &quot;&quot;)</code>
+      <preformat>The mean annual wage for the occupation in U.S. dollars for green jobs is $78,363.4, and for non-green jobs is $73,763.67. That means green jobs pay $4,599.726 more than non-green jobs nationally.</preformat>
+      <code language="r script">cat(&quot;The mean hourly wage for the occupation in U.S. dollars for green jobs is $&quot;, 
+    format(green_wages$H_MEAN, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;, and for non-green jobs is $&quot;, 
+    format(non_green_wages$H_MEAN, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;. That means green jobs pay $&quot;, 
+    format(abs(difference_hourly), big.mark = &quot;,&quot;, scientific = FALSE), 
+    ifelse(difference_hourly &gt; 0, &quot; more&quot;, &quot; less&quot;), 
+    &quot; than non-green jobs nationally.\n&quot;, sep = &quot;&quot;)</code>
+      <preformat>The mean hourly wage for the occupation in U.S. dollars for green jobs is $37.67547, and for non-green jobs is $34.79641. That means green jobs pay $2.879063 more than non-green jobs nationally.</preformat>
+      <p>I’d like to see a word cloud of different job titles for each
+      sector</p>
+      <code language="r script"># Filter the dataset for green jobs only
+green_jobs &lt;- national_jobs %&gt;%
+  filter(`O*NET-SOC Sector` %in% c(&quot;Energy Efficiency&quot;, &quot;Renewable Energy Generation&quot;, &quot;Green Construction&quot;))
+
+# Extract job titles and count their occurrences
+job_titles &lt;- green_jobs %&gt;%
+  count(OCC_TITLE, sort = TRUE)
+
+# Create a word cloud using highcharter
+hchart(
+  job_titles, 
+  &quot;wordcloud&quot;, 
+  hcaes(name = OCC_TITLE, weight = n)
+) %&gt;%
+  hc_title(text = &quot;Word Cloud of Green Job Titles&quot;)</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-16-1.png" />
+      <p>Now let’s create separate word clouds for each of the green
+      sectors (“Energy Efficiency”, “Renewable Energy Generation”, and
+      “Green Construction”).</p>
+      <code language="r script"># Filter the dataset for each sector
+energy_efficiency_jobs &lt;- national_jobs %&gt;%
+  filter(`O*NET-SOC Sector` == &quot;Energy Efficiency&quot;)
+
+renewable_energy_jobs &lt;- national_jobs %&gt;%
+  filter(`O*NET-SOC Sector` == &quot;Renewable Energy Generation&quot;)
+
+green_construction_jobs &lt;- national_jobs %&gt;%
+  filter(`O*NET-SOC Sector` == &quot;Green Construction&quot;)
+
+# Create a function to generate word clouds
+generate_wordcloud &lt;- function(data, sector_name) {
+  job_titles &lt;- data %&gt;%
+    count(OCC_TITLE, sort = TRUE)
+  
+  hchart(
+    job_titles, 
+    &quot;wordcloud&quot;, 
+    hcaes(name = OCC_TITLE, weight = n)
+  ) %&gt;%
+    hc_title(text = paste(&quot;Word Cloud of&quot;, sector_name, &quot;Job Titles&quot;))
+}
+
+# Generate word cloud for Energy Efficiency
+energy_efficiency_wordcloud &lt;- generate_wordcloud(energy_efficiency_jobs, &quot;Energy Efficiency&quot;)
+
+# Generate word cloud for Renewable Energy Generation
+renewable_energy_wordcloud &lt;- generate_wordcloud(renewable_energy_jobs, &quot;Renewable Energy Generation&quot;)
+
+# Generate word cloud for Green Construction
+green_construction_wordcloud &lt;- generate_wordcloud(green_construction_jobs, &quot;Green Construction&quot;)
+
+# Display the word clouds
+energy_efficiency_wordcloud</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-17-1.png" />
+      <code language="r script">renewable_energy_wordcloud</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-17-2.png" />
+      <code language="r script">green_construction_wordcloud</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-17-3.png" />
+      <p>Let’s export for graphing</p>
+      <code language="r script">## Export the national jobs data to CSV for graphing
+write.csv(national_jobs, here(&quot;processed_data&quot;, &quot;national_jobs.csv&quot;), row.names = FALSE)
+
+# Export the job_type_summary dataset to CSV for graphing
+write.csv(job_type_summary, here(&quot;processed_data&quot;, &quot;national_job_type_summary.csv&quot;), row.names = FALSE)</code>
+    </sec>
+    <sec id="green-jobs-in-st.-paul">
+      <title>Green jobs in St. Paul</title>
+      <code language="r script"># Import St. Paul jobs data
+st_paul_jobs &lt;- read_csv(here(&quot;processed_data&quot;, &quot;OWES_and_ONET-St_Paul.csv&quot;))</code>
+      <preformat>Rows: 742 Columns: 34
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (26): AREA_TITLE, PRIM_STATE, NAICS_TITLE, I_GROUP, OCC_CODE, OCC_TITLE,...
+dbl  (4): AREA, AREA_TYPE, NAICS, OWN_CODE
+lgl  (4): PCT_TOTAL, PCT_RPT, ANNUAL, HOURLY
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</preformat>
+      <code language="r script">saveRDS(st_paul_jobs, here(&quot;processed_data&quot;, &quot;st_paul_jobs.rds&quot;))
+
+st_paul_jobs &lt;- readRDS(here(&quot;processed_data&quot;, &quot;st_paul_jobs.rds&quot;))</code>
+      <code language="r script"># Convert necessary columns to numeric where needed
+st_paul_jobs &lt;- st_paul_jobs %&gt;%
+  mutate(
+    TOT_EMP = as.numeric(TOT_EMP),
+    H_MEAN = as.numeric(H_MEAN),
+    A_MEAN = as.numeric(A_MEAN),
+    A_MEDIAN = as.numeric(A_MEDIAN),
+    H_MEDIAN = as.numeric(H_MEDIAN)
+  )</code>
+      <preformat>Warning: There were 5 warnings in `mutate()`.
+The first warning was:
+ℹ In argument: `TOT_EMP = as.numeric(TOT_EMP)`.
+Caused by warning:
+! NAs introduced by coercion
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 4 remaining warnings.</preformat>
+      <code language="r script"># Filter the dataset to include only relevant green sectors
+filtered_st_paul_jobs &lt;- st_paul_jobs %&gt;%
+  filter(`O*NET-SOC Sector` %in% c(&quot;Energy Efficiency&quot;, &quot;Renewable Energy Generation&quot;, &quot;Green Construction&quot;))
+
+# Function to summarize data for each sector
+summarize_by_sector &lt;- function(df) {
+  df %&gt;%
+    summarize(
+      TOT_EMP = sum(TOT_EMP, na.rm = TRUE),
+      H_MEAN = mean(H_MEAN, na.rm = TRUE),
+      A_MEAN = mean(A_MEAN, na.rm = TRUE),
+      A_MEDIAN = median(A_MEDIAN, na.rm = TRUE),
+      H_MEDIAN = median(H_MEDIAN, na.rm = TRUE)
+    )
+}
+
+# Summarize the data for each sector and overall
+sector_summary_st_paul &lt;- filtered_st_paul_jobs %&gt;%
+  group_by(`O*NET-SOC Sector`) %&gt;%
+  summarize_by_sector()
+
+# Calculate the summary for all sectors combined
+overall_summary_st_paul &lt;- filtered_st_paul_jobs %&gt;%
+  summarize_by_sector()
+
+# Combine the results: sector-wise and overall
+final_summary_st_paul &lt;- bind_rows(sector_summary_st_paul, tibble(`O*NET-SOC Sector` = &quot;All&quot;, overall_summary_st_paul))
+
+# Save the final summary as an RDS file and CSV for future reference
+saveRDS(final_summary_st_paul, here(&quot;processed_data&quot;, &quot;sector_summary_st_paul.rds&quot;))
+write_csv(final_summary_st_paul, here(&quot;processed_data&quot;, &quot;sector_summary_st_paul.csv&quot;))
+
+# Output the final summary to the user
+print(final_summary_st_paul)</code>
+      <preformat># A tibble: 4 × 6
+  `O*NET-SOC Sector`          TOT_EMP H_MEAN A_MEAN A_MEDIAN H_MEDIAN
+  &lt;chr&gt;                         &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 Energy Efficiency             66410   45.5 94669.    98740     47.5
+2 Green Construction           124680   37.9 78809.    75800     36.4
+3 Renewable Energy Generation   23250   44.7 92991.    99690     47.9
+4 All                          214340   40.7 84562.    82170     39.5</preformat>
+      <code language="r script"># Calculate total employment and sector percentages for St. Paul
+total_green_jobs_st_paul &lt;- final_summary_st_paul %&gt;% filter(`O*NET-SOC Sector` == &quot;All&quot;) %&gt;% pull(TOT_EMP)
+
+energy_efficiency_jobs_st_paul &lt;- final_summary_st_paul %&gt;% filter(`O*NET-SOC Sector` == &quot;Energy Efficiency&quot;) %&gt;% pull(TOT_EMP)
+green_construction_jobs_st_paul &lt;- final_summary_st_paul %&gt;% filter(`O*NET-SOC Sector` == &quot;Green Construction&quot;) %&gt;% pull(TOT_EMP)
+renewable_energy_jobs_st_paul &lt;- final_summary_st_paul %&gt;% filter(`O*NET-SOC Sector` == &quot;Renewable Energy Generation&quot;) %&gt;% pull(TOT_EMP)
+
+# Calculate the percentages
+energy_efficiency_pct_st_paul &lt;- round((energy_efficiency_jobs_st_paul / total_green_jobs_st_paul) * 100, 2)
+green_construction_pct_st_paul &lt;- round((green_construction_jobs_st_paul / total_green_jobs_st_paul) * 100, 2)
+renewable_energy_pct_st_paul &lt;- round((renewable_energy_jobs_st_paul / total_green_jobs_st_paul) * 100, 2)
+
+# Create the concatenated sentence for St. Paul
+cat(&quot;There's a total of&quot;, format(total_green_jobs_st_paul, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;employed people in green jobs in Saint Paul. Specifically, in Energy Efficiency, there are&quot;, 
+    format(energy_efficiency_jobs_st_paul, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;(&quot;, energy_efficiency_pct_st_paul, &quot;%), in Green Construction there are&quot;, 
+    format(green_construction_jobs_st_paul, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;(&quot;, green_construction_pct_st_paul, &quot;%), and in Renewable Energy Generation there are&quot;, 
+    format(renewable_energy_jobs_st_paul, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;(&quot;, renewable_energy_pct_st_paul, &quot;%).\n&quot;)</code>
+      <preformat>There's a total of 214,340 employed people in green jobs in Saint Paul. Specifically, in Energy Efficiency, there are 66,410 ( 30.98 %), in Green Construction there are 124,680 ( 58.17 %), and in Renewable Energy Generation there are 23,250 ( 10.85 %).</preformat>
+      <code language="r script"># Visualizing TOT_EMP across the green sectors for St. Paul
+final_summary_st_paul &lt;- final_summary_st_paul %&gt;%
+  mutate(`O*NET-SOC Sector` = factor(`O*NET-SOC Sector`, levels = c(&quot;Energy Efficiency&quot;, &quot;Green Construction&quot;, &quot;Renewable Energy Generation&quot;, &quot;All&quot;)))
+
+hchart(final_summary_st_paul, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = TOT_EMP)) %&gt;%
+  hc_title(text = &quot;Total Employment by Sector in Saint Paul&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Total Employment&quot;), labels = list(format = &quot;{value:,0f}&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:,0f}&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-20-1.png" />
+      <code language="r script"># Convert the O*NET-SOC Sector to a factor for ordering in the chart for St. Paul
+final_summary_st_paul &lt;- final_summary_st_paul %&gt;%
+  mutate(`O*NET-SOC Sector` = factor(`O*NET-SOC Sector`, levels = c(&quot;Energy Efficiency&quot;, &quot;Green Construction&quot;, &quot;Renewable Energy Generation&quot;, &quot;All&quot;)))
+
+# Visualizing TOT_EMP across the sectors for St. Paul
+hchart(final_summary_st_paul, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = TOT_EMP)) %&gt;%
+  hc_title(text = &quot;Total Employment by Sector in Saint Paul&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Total Employment&quot;), labels = list(format = &quot;{value:,0f}&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:,0f}&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-21-1.png" />
+      <code language="r script"># Visualizing H_MEAN (Mean Hourly Wage) across the sectors for St. Paul
+hchart(final_summary_st_paul, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = H_MEAN)) %&gt;%
+  hc_title(text = &quot;Mean Hourly Wage by Sector in Saint Paul&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Mean Hourly Wage (USD)&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:.2f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-21-2.png" />
+      <code language="r script"># Visualizing A_MEAN (Mean Annual Wage) across the sectors for St. Paul
+hchart(final_summary_st_paul, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = A_MEAN)) %&gt;%
+  hc_title(text = &quot;Mean Annual Wage by Sector in Saint Paul&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Mean Annual Wage (USD)&quot;), labels = list(format = &quot;{value:,0f}&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:,0f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-21-3.png" />
+      <code language="r script"># Visualizing A_MEDIAN (Median Annual Wage) across the sectors for St. Paul
+hchart(final_summary_st_paul, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = A_MEDIAN)) %&gt;%
+  hc_title(text = &quot;Median Annual Wage by Sector in Saint Paul&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Median Annual Wage (USD)&quot;), labels = list(format = &quot;{value:,0f}&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:,0f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-21-4.png" />
+      <code language="r script"># Visualizing H_MEDIAN (Median Hourly Wage) across the sectors for St. Paul
+hchart(final_summary_st_paul, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = H_MEDIAN)) %&gt;%
+  hc_title(text = &quot;Median Hourly Wage by Sector in Saint Paul&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Median Hourly Wage (USD)&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:.2f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-21-5.png" />
+      <code language="r script"># Define green jobs as sectors related to energy and construction for St. Paul
+green_jobs_sectors_st_paul &lt;- c(&quot;Energy Efficiency&quot;, &quot;Renewable Energy Generation&quot;, &quot;Green Construction&quot;)
+
+# Add a new column to identify green and non-green jobs for St. Paul
+st_paul_jobs &lt;- st_paul_jobs %&gt;%
+  mutate(
+    Job_Type = ifelse(`O*NET-SOC Sector` %in% green_jobs_sectors_st_paul, &quot;Green Jobs&quot;, &quot;Non-Green Jobs&quot;)
+  )
+
+# Group by job type (Green vs Non-Green) and calculate mean wages for St. Paul
+job_type_summary_st_paul &lt;- st_paul_jobs %&gt;%
+  group_by(Job_Type) %&gt;%
+  summarize(
+    H_MEAN = mean(H_MEAN, na.rm = TRUE),
+    A_MEAN = mean(A_MEAN, na.rm = TRUE)
+  )
+
+# Visualizing Mean Hourly Wage (H_MEAN) for Green vs Non-Green Jobs in St. Paul
+hchart(job_type_summary_st_paul, &quot;column&quot;, hcaes(x = Job_Type, y = H_MEAN)) %&gt;%
+  hc_title(text = &quot;Mean Hourly Wage: Green Jobs vs Non-Green Jobs in Saint Paul&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Job Type&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Mean Hourly Wage (USD)&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:.2f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-21-6.png" />
+      <code language="r script"># Visualizing Mean Annual Wage (A_MEAN) for Green vs Non-Green Jobs in St. Paul
+hchart(job_type_summary_st_paul, &quot;column&quot;, hcaes(x = Job_Type, y = A_MEAN)) %&gt;%
+  hc_title(text = &quot;Mean Annual Wage: Green Jobs vs Non-Green Jobs in Saint Paul&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Job Type&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Mean Annual Wage (USD)&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:,0f} USD&lt;/b&gt;')</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-21-7.png" />
+      <code language="r script"># Summarizing core findings for Saint Paul
+
+# Extract green and non-green job wage data for St. Paul
+green_wages_st_paul &lt;- job_type_summary_st_paul %&gt;% filter(Job_Type == &quot;Green Jobs&quot;)
+non_green_wages_st_paul &lt;- job_type_summary_st_paul %&gt;% filter(Job_Type == &quot;Non-Green Jobs&quot;)
+
+# Calculate the difference between green and non-green jobs for St. Paul
+difference_annual_st_paul &lt;- green_wages_st_paul$A_MEAN - non_green_wages_st_paul$A_MEAN
+difference_hourly_st_paul &lt;- green_wages_st_paul$H_MEAN - non_green_wages_st_paul$H_MEAN
+
+# Format and print the sentences for Saint Paul
+cat(&quot;The mean annual wage for the occupation in U.S. dollars for green jobs in Saint Paul is $&quot;, 
+    format(green_wages_st_paul$A_MEAN, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;, and for non-green jobs is $&quot;, 
+    format(non_green_wages_st_paul$A_MEAN, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;. That means green jobs in Saint Paul pay $&quot;, 
+    format(abs(difference_annual_st_paul), big.mark = &quot;,&quot;, scientific = FALSE), 
+    ifelse(difference_annual_st_paul &gt; 0, &quot; more&quot;, &quot; less&quot;), 
+    &quot; than non-green jobs in Saint Paul.\n&quot;, sep = &quot;&quot;)</code>
+      <preformat>The mean annual wage for the occupation in U.S. dollars for green jobs in Saint Paul is $84,561.7, and for non-green jobs is $77,192.53. That means green jobs in Saint Paul pay $7,369.169 more than non-green jobs in Saint Paul.</preformat>
+      <code language="r script">cat(&quot;The mean hourly wage for the occupation in U.S. dollars for green jobs in Saint Paul is $&quot;, 
+    format(green_wages_st_paul$H_MEAN, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;, and for non-green jobs is $&quot;, 
+    format(non_green_wages_st_paul$H_MEAN, big.mark = &quot;,&quot;, scientific = FALSE), 
+    &quot;. That means green jobs in Saint Paul pay $&quot;, 
+    format(abs(difference_hourly_st_paul), big.mark = &quot;,&quot;, scientific = FALSE), 
+    ifelse(difference_hourly_st_paul &gt; 0, &quot; more&quot;, &quot; less&quot;), 
+    &quot; than non-green jobs in Saint Paul.\n&quot;, sep = &quot;&quot;)</code>
+      <preformat>The mean hourly wage for the occupation in U.S. dollars for green jobs in Saint Paul is $40.65447, and for non-green jobs is $36.30688. That means green jobs in Saint Paul pay $4.347591 more than non-green jobs in Saint Paul.</preformat>
+      <p>I’d like to see a word cloud of different job titles for each
+      sector in St. Paul</p>
+      <code language="r script"># Filter the dataset for green jobs only in St. Paul
+green_jobs_st_paul &lt;- st_paul_jobs %&gt;%
+  filter(`O*NET-SOC Sector` %in% c(&quot;Energy Efficiency&quot;, &quot;Renewable Energy Generation&quot;, &quot;Green Construction&quot;))
+
+# Extract job titles and count their occurrences in St. Paul
+job_titles_st_paul &lt;- green_jobs_st_paul %&gt;%
+  count(OCC_TITLE, sort = TRUE)
+
+# Create a word cloud for green jobs in St. Paul using highcharter
+hchart(
+  job_titles_st_paul, 
+  &quot;wordcloud&quot;, 
+  hcaes(name = OCC_TITLE, weight = n)
+) %&gt;%
+  hc_title(text = &quot;Word Cloud of Green Job Titles in Saint Paul&quot;)</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-22-1.png" />
+      <p>Now let’s create separate word clouds for each of the green
+      sectors (“Energy Efficiency”, “Renewable Energy Generation”, and
+      “Green Construction”) for St. Paul</p>
+      <code language="r script"># Filter the dataset for each sector in St. Paul
+energy_efficiency_jobs_st_paul &lt;- st_paul_jobs %&gt;%
+  filter(`O*NET-SOC Sector` == &quot;Energy Efficiency&quot;)
+
+renewable_energy_jobs_st_paul &lt;- st_paul_jobs %&gt;%
+  filter(`O*NET-SOC Sector` == &quot;Renewable Energy Generation&quot;)
+
+green_construction_jobs_st_paul &lt;- st_paul_jobs %&gt;%
+  filter(`O*NET-SOC Sector` == &quot;Green Construction&quot;)
+
+# Create a function to generate word clouds for St. Paul sectors
+generate_wordcloud_st_paul &lt;- function(data, sector_name) {
+  job_titles &lt;- data %&gt;%
+    count(OCC_TITLE, sort = TRUE)
+  
+  hchart(
+    job_titles, 
+    &quot;wordcloud&quot;, 
+    hcaes(name = OCC_TITLE, weight = n)
+  ) %&gt;%
+    hc_title(text = paste(&quot;Word Cloud of&quot;, sector_name, &quot;Job Titles in Saint Paul&quot;))
+}
+
+# Generate word cloud for Energy Efficiency in St. Paul
+energy_efficiency_wordcloud_st_paul &lt;- generate_wordcloud_st_paul(energy_efficiency_jobs_st_paul, &quot;Energy Efficiency&quot;)
+
+# Generate word cloud for Renewable Energy Generation in St. Paul
+renewable_energy_wordcloud_st_paul &lt;- generate_wordcloud_st_paul(renewable_energy_jobs_st_paul, &quot;Renewable Energy Generation&quot;)
+
+# Generate word cloud for Green Construction in St. Paul
+green_construction_wordcloud_st_paul &lt;- generate_wordcloud_st_paul(green_construction_jobs_st_paul, &quot;Green Construction&quot;)
+
+# Display the word clouds for St. Paul
+energy_efficiency_wordcloud_st_paul</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-23-1.png" />
+      <code language="r script">renewable_energy_wordcloud_st_paul</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-23-2.png" />
+      <code language="r script">green_construction_wordcloud_st_paul</code>
+      <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-23-3.png" />
+      <p>Let’s export for graphing</p>
+      <code language="r script"># Export the St. Paul jobs data to CSV for graphing
+write.csv(st_paul_jobs, here(&quot;processed_data&quot;, &quot;st_paul_jobs.csv&quot;), row.names = FALSE)
+
+# Export the job_type_summary dataset for St. Paul to CSV for graphing
+write.csv(job_type_summary_st_paul, here(&quot;processed_data&quot;, &quot;st_paul_job_type_summary.csv&quot;), row.names = FALSE)</code>
+    </sec>
+  </sec>
+  <sec id="quality-pay-and-qualifications-of-green-jobs">
+    <title>3. Quality, Pay, and Qualifications of Green Jobs</title>
+    <boxed-text>
+    <p><bold>RQ 3: What is the quality of these green jobs? How much do
+    they pay? What qualifications are needed (education and experience)
+    nationally?</bold></p>
+    <p><bold>Higher education</bold> is associated with better-quality
+    green jobs, particularly in the energy efficiency sector. Most high-
+    and medium-quality jobs in energy efficiency require at least a
+    Bachelor’s Degree.</p>
+    <p><bold>Individuals with lower education levels</bold> are more
+    likely to end up in green construction, especially in lower-quality
+    jobs. Energy efficiency tends to offer a better quality of jobs
+    across all education levels, with strong representation in both high
+    and medium-quality segments.</p>
+    <p><bold>Union membership</bold> is <bold>associated</bold> with
+    <bold>higher-quality jobs</bold> in all three sectors, particularly
+    in energy efficiency and renewable energy generation, where a
+    majority of high-quality jobs are unionized.</p>
+    </boxed-text>
+    <code language="r script"># Import green job quality data
+quality_green_jobs &lt;- read_csv(here(&quot;processed_data&quot;, &quot;Job_Info_Merged_All_Green.csv&quot;))</code>
+    <preformat>Rows: 128 Columns: 29
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (14): Reported Occupation, O*NET-SOC Code, O*NET-SOC Title, O*NET-SOC Ca...
+dbl (15): Renewable Energy Generation, Energy Efficiency, Green Construction...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</preformat>
+    <code language="r script">saveRDS(quality_green_jobs, here(&quot;processed_data&quot;, &quot;quality_green_jobs.rds&quot;))
+
+quality_green_jobs &lt;- readRDS(here(&quot;processed_data&quot;, &quot;quality_green_jobs.rds&quot;))</code>
+    <p>Now, let’s transform this dataframe so it’s
+    visualization-ready.</p>
+    <code language="r script"># Rename columns to snake_case format
+quality_green_jobs &lt;- quality_green_jobs %&gt;%
+  rename(
+    report_occupation = `Reported Occupation`,
+    onet_soc_code = `O*NET-SOC Code`,
+    onet_soc_title = `O*NET-SOC Title`,
+    onet_soc_category = `O*NET-SOC Category`,
+    onet_soc_sector = `O*NET-SOC Sector`,
+    renewable_energy_generation = `Renewable Energy Generation`,
+    energy_efficiency = `Energy Efficiency`,
+    green_construction = `Green Construction`,
+    benchmark_total = `Benchmark Total`,
+    wage = Wage,
+    forty_hours = `40 hours`,
+    schedule = Schedule,
+    health_ins = `Health Ins`,
+    retirement = Retirement,
+    growth = Growth,
+    unemployment = Unemployment,
+    illness_injury = `Illness/injury`,
+    ojt = OJT,
+    union = Union,
+    autonomy_benchmark = autonomy_benchmark,
+    quality = quality,
+    education = education,
+    matrix_title = `2022 National Employment Matrix title`,
+    matrix_code = `2022 National Employment Matrix code`,
+    typical_education_needed = `Typical education needed for entry`,
+    work_experience_related = `Work experience in a related occupation`,
+    on_the_job_training = `Typical on-the-job training needed to attain competency in the occupation`
+  )</code>
+    <code language="r script"># Convert the variables to the correct types
+quality_green_jobs &lt;- quality_green_jobs %&gt;%
+  mutate(
+    # Factors
+    onet_soc_category = factor(onet_soc_category),
+    onet_soc_sector = factor(onet_soc_sector),
+    quality = factor(quality, levels = c(&quot;Low Quality&quot;, &quot;Medium Quality&quot;, &quot;High Quality&quot;)),
+    education = factor(education),
+    typical_education_needed = factor(typical_education_needed),
+    work_experience_related = factor(work_experience_related),
+    on_the_job_training = factor(on_the_job_training),
+    
+    # Yes/No columns as numeric (1 for Yes, 0 for No)
+    renewable_energy_generation = as.numeric(renewable_energy_generation),
+    energy_efficiency = as.numeric(energy_efficiency),
+    green_construction = as.numeric(green_construction),
+    wage = as.numeric(wage),
+    forty_hours = as.numeric(forty_hours),
+    schedule = as.numeric(schedule),
+    health_ins = as.numeric(health_ins),
+    retirement = as.numeric(retirement),
+    growth = as.numeric(growth),
+    unemployment = as.numeric(unemployment),
+    illness_injury = as.numeric(illness_injury),
+    ojt = as.numeric(ojt),
+    union = as.numeric(union),
+    autonomy_benchmark = as.numeric(autonomy_benchmark)
+  )</code>
+    <code language="r script"># Visualize quality jobs compared across sectors
+quality_summary &lt;- quality_green_jobs %&gt;%
+  gather(key = &quot;sector&quot;, value = &quot;is_green_job&quot;, renewable_energy_generation, energy_efficiency, green_construction) %&gt;%
+  filter(is_green_job == 1) %&gt;%
+  group_by(sector, quality) %&gt;%
+  summarise(count = n()) %&gt;%
+  mutate(percentage = count / sum(count) * 100)</code>
+    <preformat>`summarise()` has grouped output by 'sector'. You can override using the
+`.groups` argument.</preformat>
+    <code language="r script">ggplot(quality_summary, aes(x = sector, y = percentage, fill = quality)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;fill&quot;, width = 0.7) +
+  geom_text(aes(label = paste0(round(percentage, 1), &quot;%&quot;)), 
+            position = position_fill(vjust = 0.5), size = 4) +
+  labs(x = &quot;Sector&quot;, y = &quot;Percentage&quot;, title = &quot;Green Job Quality by Sector&quot;) +
+  scale_fill_manual(values = c(&quot;High Quality&quot; = &quot;#1f77b4&quot;, &quot;Medium Quality&quot; = &quot;#ffbb78&quot;, &quot;Low Quality&quot; = &quot;#2ca02c&quot;)) +
+  theme_minimal() +
+  theme(legend.title = element_blank())</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-28-1.png" />
+    <code language="r script"># Visualize quality jobs compared for sector, education, and quality
+quality_summary_education &lt;- quality_green_jobs %&gt;%
+  gather(key = &quot;sector&quot;, value = &quot;is_green_job&quot;, renewable_energy_generation, energy_efficiency, green_construction) %&gt;%
+  filter(is_green_job == 1) %&gt;%
+  group_by(sector, quality, education) %&gt;%
+  summarise(count = n()) %&gt;%
+  mutate(percentage = count / sum(count) * 100)</code>
+    <preformat>`summarise()` has grouped output by 'sector', 'quality'. You can override using
+the `.groups` argument.</preformat>
+    <code language="r script">ggplot(quality_summary_education, aes(x = education, y = percentage, fill = sector)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  facet_wrap(~ quality, ncol = 1, scales = &quot;free_y&quot;) + # Separate the quality levels
+  geom_text(aes(label = paste0(round(percentage, 1), &quot;%&quot;)), 
+            position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  labs(x = &quot;Education Level&quot;, y = &quot;Percentage&quot;, title = &quot;Green Job Quality by Sector and Education&quot;) +
+  theme_minimal() +
+  theme(legend.title = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1))</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-29-1.png" />
+    <p>This graph shows how the distribution of green jobs (energy
+    efficiency, green construction, renewable energy generation) varies
+    across different levels of education, segmented by job quality (Low,
+    Medium, High quality).</p>
+    <p>Based on the above graph:</p>
+    <list list-type="bullet">
+      <list-item>
+        <p><bold>Energy Efficiency</bold> consistently dominates
+        high-quality and medium-quality green jobs across most education
+        levels, suggesting that this sector offers the most secure and
+        rewarding jobs for those with varying levels of education.</p>
+      </list-item>
+      <list-item>
+        <p><bold>Green Construction</bold> has a significant presence in
+        low-quality and medium-quality jobs, especially for those with
+        lower education levels (such as high school diplomas or no
+        formal educational credentials).</p>
+      </list-item>
+      <list-item>
+        <p><bold>Renewable Energy Generation</bold> seems to have fewer
+        high-quality job opportunities compared to energy efficiency,
+        but it does offer medium-quality opportunities, particularly for
+        those with lower education levels.</p>
+      </list-item>
+    </list>
+    <code language="r script"># # Matrix table that shows green job quality segmented by variables from wage to union across the three sectors (renewable_energy_generation, energy_efficiency, green_construction)
+
+# # Transform the data to long format
+# long_quality_jobs &lt;- quality_green_jobs %&gt;%
+#   gather(key = &quot;sector&quot;, value = &quot;is_green_job&quot;, renewable_energy_generation, energy_efficiency, green_construction) %&gt;%
+#   filter(is_green_job == 1) %&gt;%
+#   select(sector, quality, wage, forty_hours, schedule, health_ins, retirement, growth, unemployment, illness_injury, ojt, union, autonomy_benchmark) %&gt;%
+#   pivot_longer(cols = wage:autonomy_benchmark, names_to = &quot;variable&quot;, values_to = &quot;value&quot;) %&gt;%
+#   group_by(sector, quality, variable) %&gt;%
+#   summarise(proportion = mean(value)) %&gt;%
+#   ungroup() %&gt;%
+#   arrange(sector, quality, variable)
+# 
+# # Generate matrix table using gt
+# matrix_table &lt;- long_quality_jobs %&gt;%
+#   pivot_wider(names_from = quality, values_from = proportion) %&gt;%
+#   gt() %&gt;%
+#   tab_header(
+#     title = &quot;Green Job Quality Matrix by Sector and Variables&quot;,
+#     subtitle = &quot;Proportion of Each Job Quality Level Across Wage, Hours, Benefits, etc.&quot;
+#   ) %&gt;%
+#   fmt_number(
+#     columns = vars(`High Quality`, `Medium Quality`, `Low Quality`),
+#     decimals = 2
+#   )
+# 
+# # Display the matrix table
+# print(matrix_table)</code>
+    <code language="r script"># Visualize quality jobs compared for sector, union membership, and quality
+quality_summary_union &lt;- quality_green_jobs %&gt;%
+  gather(key = &quot;sector&quot;, value = &quot;is_green_job&quot;, renewable_energy_generation, energy_efficiency, green_construction) %&gt;%
+  filter(is_green_job == 1) %&gt;%
+  group_by(sector, quality, union) %&gt;%
+  summarise(count = n()) %&gt;%
+  mutate(percentage = count / sum(count) * 100)</code>
+    <preformat>`summarise()` has grouped output by 'sector', 'quality'. You can override using
+the `.groups` argument.</preformat>
+    <code language="r script">ggplot(quality_summary_union, aes(x = as.factor(union), y = percentage, fill = sector)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  facet_wrap(~ quality, ncol = 1, scales = &quot;free_y&quot;) + # Separate the quality levels
+  geom_text(aes(label = paste0(round(percentage, 1), &quot;%&quot;)), 
+            position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  labs(x = &quot;Union Membership&quot;, y = &quot;Percentage&quot;, title = &quot;Green Job Quality by Sector and Union Membership&quot;) +
+  theme_minimal() +
+  theme(legend.title = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1))</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-31-1.png" />
+    <p>The above graph shows green job quality segmented by union
+    membership across three sectors: <bold>Energy Efficiency</bold>,
+    <bold>Green Construction</bold>, and <bold>Renewable Energy
+    Generation</bold>.</p>
+    <list list-type="bullet">
+      <list-item>
+        <p><bold>Union membership</bold> is <bold>associated</bold> with
+        <bold>higher-quality jobs</bold> in all three sectors,
+        particularly in energy efficiency and renewable energy
+        generation, where a majority of high-quality jobs are unionized.
+        This suggests that <bold>unions play a significant role in
+        securing better working conditions and benefits</bold> for
+        workers in green jobs.</p>
+      </list-item>
+      <list-item>
+        <p><bold>Medium-quality jobs</bold> also show a clear advantage
+        for unionized workers across the sectors, particularly in green
+        construction and renewable energy generation.</p>
+      </list-item>
+      <list-item>
+        <p>The presence of <bold>union coverage even in low-quality
+        jobs</bold> across sectors might indicate that unionized jobs
+        are spread across different quality categories, though the
+        majority of benefits seem to concentrate in medium- and
+        high-quality roles.</p>
+      </list-item>
+    </list>
+    <code language="r script"># Export the green quality jobs data to CSV for graphing
+saveRDS(quality_green_jobs, here(&quot;processed_data&quot;, &quot;quality_green_jobs.rds&quot;))
+
+write_csv(quality_green_jobs, here(&quot;processed_data&quot;, &quot;quality_green_jobs.csv&quot;))</code>
+  </sec>
+  <sec id="demographics-of-green-job-recipients">
+    <title>4. Demographics of Green Job Recipients</title>
+    <boxed-text>
+    <p><bold>RQ 4: Who is getting these green jobs, based on education,
+    race/ethnicity, gender, and income levels in the City of Saint
+    Paul?</bold></p>
+    <p>Of the more than <bold>303,820 people</bold> who live in
+    <bold>St. Paul</bold>, <bold>50.5%</bold> are women, which is
+    aligned with the national average. The majority of residents in
+    St. Paul are <bold>white</bold> (54.3%). <bold>Black or African
+    American people</bold> (15.6%) make up the largest community of
+    color in the city. Other <bold>communities of color,</bold>
+    including Asian (18.4%), Alaska and Native American (0.7%), Hispanic
+    or Latino (8.6%) and Two or More Races (7.8%), make up about 41.5%
+    of the population. Around <bold>42.8% of people aged 25 and older
+    have a bachelor’s degree</bold> in St. Paul, which is higher than
+    the national rate of 34% but lower than Minneapolis’ 54%.</p>
+    </boxed-text>
+    <p>In the following figures, we describe the challenges women and
+    people of color in Saint Paul are likely to face in equitably
+    accessing the jobs that may be created through BIL and IRA funding
+    in three specific sectors: energy efficiency, renewable-energy
+    generation, and green construction.</p>
+    <list list-type="bullet">
+      <list-item>
+        <p><bold>2023 Occupational Employment and Wage Survey
+        (OEWS):</bold></p>
+        <list list-type="bullet">
+          <list-item>
+            <p>Provides employment and wage data by occupation.</p>
+          </list-item>
+          <list-item>
+            <p>It’s organized at the <bold>Metropolitan Statistical Area
+            (MSA)</bold> level, which includes a broader geographic area
+            (e.g., Minneapolis-St. Paul-Bloomington, MN-WI Metro).</p>
+          </list-item>
+          <list-item>
+            <p>This data gives insights into <bold>jobs and wages</bold>
+            but lacks detailed individual demographics such as race,
+            ethnicity, education, etc.</p>
+          </list-item>
+        </list>
+      </list-item>
+      <list-item>
+        <p><bold>Geocorr Data from the Missouri Census Data
+        Center:</bold></p>
+        <list list-type="bullet">
+          <list-item>
+            <p>This data helps map geographic boundaries like PUMAs
+            (Public Use Microdata Areas) to more specific local areas,
+            such as St. Paul.</p>
+          </list-item>
+          <list-item>
+            <p>By using geographic weighting from Geocorr, we can
+            estimate <bold>St. Paul-specific</bold> statistics from the
+            broader MSA-level data in the OEWS.</p>
+          </list-item>
+        </list>
+      </list-item>
+    </list>
+    <list list-type="order">
+      <list-item>
+        <p>Load and explore the two datasets.</p>
+      </list-item>
+      <list-item>
+        <p>Filter the OEWS data to the Minneapolis-St. Paul-Bloomington
+        Metro area.</p>
+      </list-item>
+      <list-item>
+        <p>Get weights from the Geocorr file to adjust for St. Paul’s
+        population.</p>
+      </list-item>
+      <list-item>
+        <p>Merge demographic data (from ACS) with the estimated job/wage
+        data from OEWS.</p>
+      </list-item>
+      <list-item>
+        <p>Analyze the final dataset for insights into who holds green
+        jobs in St. Paul.</p>
+      </list-item>
+    </list>
+    <p><bold>2023 Occupational Employment and Wage Survey</bold></p>
+    <p>✅<ext-link ext-link-type="uri" xlink:href="https://docs.google.com/spreadsheets/d/1I2munGunOJgdI2iWRW7p0BVU0O13r4zb/edit?gid=1944656488#gid=1944656488">National
+    level data</ext-link></p>
+    <p>✅<ext-link ext-link-type="uri" xlink:href="https://docs.google.com/spreadsheets/d/105RYiRn-1LIVC-iUdCD3fCKROfOGH_M62s45gbo7GFM/edit?gid=2141627594#gid=2141627594">Minneapolis-St. Paul-Bloomington,
+    MN-WI</ext-link></p>
+    <p><bold>Geocorr from the Missouri Census Data Center</bold></p>
+    <p><ext-link ext-link-type="uri" xlink:href="https://docs.google.com/spreadsheets/d/1wRr-jATTjaXpErUfSCAZsoSn-lt1-TZtWv_Hoq2C29Q/edit?gid=1877088889#gid=1877088889">Minnesota
+    Level </ext-link>: Contains data mapping PUMAs to Metropolitan
+    Statistical Areas and PUMAs to cities</p>
+    <p><bold>Processed</bold> </p>
+    <p><ext-link ext-link-type="uri" xlink:href="https://drive.google.com/file/d/1uyRoXlExkExjlJytEh8meqD3D--4Hwj4/view?usp=drive_link">St. Paul
+    - ACS PUMS - Five Years + O*NET Green Jobs</ext-link></p>
+    <p><ext-link ext-link-type="uri" xlink:href="https://drive.google.com/file/d/1C3opSLifg144MIYnISHmf7wwZuAe2TQJ/view?usp=drive_link">National
+    - ACS PUMS - Five Years + O*NET Green Jobs</ext-link></p>
+    <p>We will first need to load the <bold>OEWS</bold> data
+    (Occupational Employment and Wage Survey) and the
+    <bold>Geocorr</bold> data (geographic weights from the Missouri
+    Census Data Center) into R.</p>
+    <list list-type="bullet">
+      <list-item>
+        <p><bold>OEWS:</bold> processed_data/OWES_and_ONET_St_Paul</p>
+      </list-item>
+      <list-item>
+        <p><bold>Geocorr:</bold> raw_data/Geocorr from the Missouri
+        Census Data Center - Minnesota.xlsx</p>
+      </list-item>
+    </list>
+    <p>We have the <bold>ACS (American Community Survey)</bold> data
+    that provides demographic information (education, race, gender,
+    income), so we’ll load that as well.</p>
+    <list list-type="bullet">
+      <list-item>
+        <p><bold>ACS:</bold> processed_data/St_Paul_ACS_All_Jobs.csv</p>
+      </list-item>
+    </list>
+    <p><bold>Load the OEWS data</bold> (Occupational Employment and Wage
+    Survey), the Geocorr data (geographic weights from the Missouri
+    Census Data Center), and the ACS (American Community Survey) data
+    that provides demographic information (education, race, gender,
+    income). The OEWS Data: is already filtered to the
+    Minneapolis-St. Paul-Bloomington, MN-WI Metro Area.</p>
+    <code language="r script"># Load St. Paul jobs data (OEWS dataset)
+st_paul_jobs &lt;- read_csv(here(&quot;processed_data&quot;, &quot;OWES_and_ONET-St_Paul.csv&quot;))</code>
+    <preformat>Rows: 742 Columns: 34
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (26): AREA_TITLE, PRIM_STATE, NAICS_TITLE, I_GROUP, OCC_CODE, OCC_TITLE,...
+dbl  (4): AREA, AREA_TYPE, NAICS, OWN_CODE
+lgl  (4): PCT_TOTAL, PCT_RPT, ANNUAL, HOURLY
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</preformat>
+    <code language="r script">saveRDS(st_paul_jobs, here(&quot;processed_data&quot;, &quot;st_paul_jobs.rds&quot;))
+st_paul_jobs &lt;- readRDS(here(&quot;processed_data&quot;, &quot;st_paul_jobs.rds&quot;))
+
+# Load the Geocorr data from Excel (Minnesota-specific)
+geocorr_data &lt;- read_excel(here(&quot;raw_data&quot;, &quot;Geocorr from the Missouri Census Data Center - Minnesota.xlsx&quot;))
+
+# Load the ACS data for St. Paul (demographic data)
+acs_data &lt;- read_csv(here(&quot;processed_data&quot;, &quot;St_Paul_ACS_All_Jobs.csv&quot;))</code>
+    <preformat>Rows: 1730 Columns: 19
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr  (7): RT, SERIALNO, SOCP, RAC1P, SEX, SCHL, O*NET-SOC Title
+dbl (12): DIVISION, SPORDER, PUMA20, REGION, ST, AGEP, PINCP, ADJINC, WAGP, ...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</preformat>
+    <code language="r script">saveRDS(acs_data, here(&quot;processed_data&quot;, &quot;acs_data.rds&quot;))
+acs_data &lt;- readRDS(here(&quot;processed_data&quot;, &quot;acs_data.rds&quot;))</code>
+    <p><bold>Use Geocorr to apply weights.</bold> The
+    <bold>Geocorr</bold> data provides the geographic weights that
+    represent the population of St. Paul relative to the larger metro
+    area.The purpose of this step is to adjust the OEWS data to better
+    represent <bold>St. Paul</bold> specifically. We will calculate the
+    percentage of St. Paul’s population in the larger metro area using
+    <bold>Geocorr</bold> and apply this as a weight to the OEWS
+    data.</p>
+    <p>Since we are working with PUMAs (Public Use Microdata Areas) and
+    need to adjust the OEWS data for St. Paul using the Geocorr weights,
+    we’ll focus on using:</p>
+    <list list-type="bullet">
+      <list-item>
+        <p><monospace>Total population (2020 Census)</monospace> to
+        understand the population of each PUMA.</p>
+      </list-item>
+      <list-item>
+        <p><monospace>puma22-to-cbsa20</monospace> allocation factor,
+        which represents the proportion of the population in each PUMA
+        that falls within the Minneapolis-St. Paul-Bloomington metro
+        area.</p>
+      </list-item>
+    </list>
+    <p>The St. Paul weighted allocation factor is 1, which means that
+    for these specific PUMAs (representing <bold>Ramsey County–St. Paul
+    City</bold>), the entire population is considered part of the
+    Minneapolis-St. Paul-Bloomington metro area. This result suggests
+    that we can apply the full population of these PUMAs without needing
+    further weighting, which simplifies the next steps.</p>
+    <code language="r script"># Filter the Geocorr data to only include St. Paul PUMAs
+st_paul_geocorr &lt;- geocorr_data %&gt;%
+  filter(`PUMA22 name` %in% c(
+    &quot;Ramsey County--St. Paul City (Northwest)&quot;, 
+    &quot;Ramsey County--St. Paul City (Southwest)&quot;, 
+    &quot;Ramsey County--St. Paul City (East)&quot;
+  ))
+
+# Calculate the total population for St. Paul PUMAs and the weighted allocation factor
+st_paul_population &lt;- sum(st_paul_geocorr$`Total population (2020 Census)`, na.rm = TRUE)
+metro_population &lt;- sum(geocorr_data$`Total population (2020 Census)`, na.rm = TRUE)
+
+# Calculate the weighted population factor for St. Paul within the metro area using the allocation factor
+st_paul_weight &lt;- sum(st_paul_geocorr$`puma22-to-cbsa20 allocation factor`, na.rm = TRUE) / nrow(st_paul_geocorr)
+
+# Output the results
+cat(&quot;St. Paul weighted allocation factor:&quot;, st_paul_weight, &quot;\n&quot;)</code>
+    <preformat>St. Paul weighted allocation factor: 1 </preformat>
+    <code language="r script">cat(&quot;St. Paul population:&quot;, format(st_paul_population, big.mark = &quot;,&quot;, scientific = FALSE), &quot;\n&quot;)</code>
+    <preformat>St. Paul population: 311,527 </preformat>
+    <code language="r script">cat(&quot;Metro area population:&quot;, format(metro_population, big.mark = &quot;,&quot;, scientific = FALSE), &quot;\n&quot;)</code>
+    <preformat>Metro area population: 5,706,494 </preformat>
+    <p><bold>Estimate St. Paul-specific data</bold>. Multiply the
+    employment numbers and wages in the <bold>OEWS</bold> data by the
+    St. Paul weight to get <bold>St. Paul-specific</bold> employment and
+    wage estimates.</p>
+    <p>We’ll multiply the employment numbers (TOT_EMP) and wages (H_MEAN
+    and A_MEAN) from the <bold>OEWS</bold> dataset by this St. Paul
+    weight to get <bold>St. Paul-specific estimates</bold>.</p>
+    <code language="r script"># Ensure that the necessary columns are numeric
+st_paul_jobs &lt;- st_paul_jobs %&gt;%
+  mutate(
+    TOT_EMP = as.numeric(TOT_EMP),  # Convert total employment to numeric
+    H_MEAN = as.numeric(H_MEAN),    # Convert mean hourly wage to numeric
+    A_MEAN = as.numeric(A_MEAN)     # Convert mean annual wage to numeric
+  )</code>
+    <preformat>Warning: There were 3 warnings in `mutate()`.
+The first warning was:
+ℹ In argument: `TOT_EMP = as.numeric(TOT_EMP)`.
+Caused by warning:
+! NAs introduced by coercion
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 2 remaining warnings.</preformat>
+    <code language="r script"># Apply the St. Paul weight to the OEWS dataset to adjust the employment and wage data for St. Paul
+st_paul_jobs_weighted &lt;- st_paul_jobs %&gt;%
+  mutate(
+    TOT_EMP_St_Paul = TOT_EMP * st_paul_weight,  # Adjusting total employment to St. Paul
+    H_MEAN_St_Paul = H_MEAN * st_paul_weight,    # Adjusting mean hourly wage
+    A_MEAN_St_Paul = A_MEAN * st_paul_weight     # Adjusting mean annual wage
+  )
+
+# Output a glimpse of the adjusted St. Paul-specific job data
+glimpse(st_paul_jobs_weighted)</code>
+    <preformat>Rows: 742
+Columns: 37
+$ AREA               &lt;dbl&gt; 33460, 33460, 33460, 33460, 33460, 33460, 33460, 33…
+$ AREA_TITLE         &lt;chr&gt; &quot;Minneapolis-St. Paul-Bloomington, MN-WI&quot;, &quot;Minneap…
+$ AREA_TYPE          &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, …
+$ PRIM_STATE         &lt;chr&gt; &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN…
+$ NAICS              &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+$ NAICS_TITLE        &lt;chr&gt; &quot;Cross-industry&quot;, &quot;Cross-industry&quot;, &quot;Cross-industry…
+$ I_GROUP            &lt;chr&gt; &quot;cross-industry&quot;, &quot;cross-industry&quot;, &quot;cross-industry…
+$ OWN_CODE           &lt;dbl&gt; 1235, 1235, 1235, 1235, 1235, 1235, 1235, 1235, 123…
+$ OCC_CODE           &lt;chr&gt; &quot;00-0000&quot;, &quot;11-0000&quot;, &quot;11-1011&quot;, &quot;11-1021&quot;, &quot;11-103…
+$ OCC_TITLE          &lt;chr&gt; &quot;All Occupations&quot;, &quot;Management Occupations&quot;, &quot;Chief…
+$ O_GROUP            &lt;chr&gt; &quot;total&quot;, &quot;major&quot;, &quot;detailed&quot;, &quot;detailed&quot;, &quot;detailed…
+$ TOT_EMP            &lt;dbl&gt; 1911030, 140870, 4420, 48300, 70, 90, 7000, 7390, 9…
+$ EMP_PRSE           &lt;chr&gt; &quot;0&quot;, &quot;1.2&quot;, &quot;3.9&quot;, &quot;2&quot;, &quot;11.9&quot;, &quot;20.5&quot;, &quot;3.4&quot;, &quot;11.…
+$ JOBS_1000          &lt;chr&gt; &quot;1000&quot;, &quot;73.712&quot;, &quot;2.315&quot;, &quot;25.272&quot;, &quot;0.036&quot;, &quot;0.04…
+$ LOC_QUOTIENT       &lt;chr&gt; &quot;1&quot;, &quot;1.07&quot;, &quot;1.66&quot;, &quot;1.09&quot;, &quot;0.17&quot;, &quot;0.36&quot;, &quot;1.51&quot;…
+$ PCT_TOTAL          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ PCT_RPT            &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ H_MEAN             &lt;dbl&gt; 33.80, 69.10, 129.79, 59.93, NA, 59.25, 86.25, 81.1…
+$ A_MEAN             &lt;dbl&gt; 70290, 143730, 269950, 124650, 82650, 123240, 17939…
+$ MEAN_PRSE          &lt;chr&gt; &quot;0.5&quot;, &quot;1&quot;, &quot;3.5&quot;, &quot;1.2&quot;, &quot;2.6&quot;, &quot;8.7&quot;, &quot;1.9&quot;, &quot;2.4…
+$ H_PCT10            &lt;chr&gt; &quot;15.06&quot;, &quot;29.27&quot;, &quot;45.92&quot;, &quot;22.92&quot;, &quot;*&quot;, &quot;33.65&quot;, &quot;…
+$ H_PCT25            &lt;chr&gt; &quot;18.45&quot;, &quot;41.06&quot;, &quot;67.35&quot;, &quot;32.21&quot;, &quot;*&quot;, &quot;37.64&quot;, &quot;…
+$ H_MEDIAN           &lt;chr&gt; &quot;26.37&quot;, &quot;61.33&quot;, &quot;100.87&quot;, &quot;49.26&quot;, &quot;*&quot;, &quot;55.5&quot;, &quot;…
+$ H_PCT75            &lt;chr&gt; &quot;39.85&quot;, &quot;83.45&quot;, &quot;#&quot;, &quot;76.63&quot;, &quot;*&quot;, &quot;70.61&quot;, &quot;101.…
+$ H_PCT90            &lt;chr&gt; &quot;60.7&quot;, &quot;110.83&quot;, &quot;#&quot;, &quot;105.67&quot;, &quot;*&quot;, &quot;98.35&quot;, &quot;#&quot;,…
+$ A_PCT10            &lt;chr&gt; &quot;31320&quot;, &quot;60890&quot;, &quot;95510&quot;, &quot;47670&quot;, &quot;21140&quot;, &quot;69990…
+$ A_PCT25            &lt;chr&gt; &quot;38380&quot;, &quot;85410&quot;, &quot;140090&quot;, &quot;66990&quot;, &quot;37050&quot;, &quot;7828…
+$ A_MEDIAN           &lt;chr&gt; &quot;54850&quot;, &quot;127570&quot;, &quot;209820&quot;, &quot;102460&quot;, &quot;79000&quot;, &quot;11…
+$ A_PCT75            &lt;chr&gt; &quot;82890&quot;, &quot;173570&quot;, &quot;#&quot;, &quot;159380&quot;, &quot;114000&quot;, &quot;146860…
+$ A_PCT90            &lt;chr&gt; &quot;126260&quot;, &quot;230520&quot;, &quot;#&quot;, &quot;219800&quot;, &quot;151910&quot;, &quot;20457…
+$ ANNUAL             &lt;lgl&gt; NA, NA, NA, NA, TRUE, NA, NA, NA, NA, NA, NA, NA, N…
+$ HOURLY             &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ `O*NET-SOC Code`   &lt;chr&gt; NA, NA, NA, &quot;11-1021&quot;, NA, NA, NA, NA, NA, NA, NA, …
+$ `O*NET-SOC Sector` &lt;chr&gt; NA, NA, NA, &quot;Energy Efficiency&quot;, NA, NA, NA, NA, NA…
+$ TOT_EMP_St_Paul    &lt;dbl&gt; 1911030, 140870, 4420, 48300, 70, 90, 7000, 7390, 9…
+$ H_MEAN_St_Paul     &lt;dbl&gt; 33.80, 69.10, 129.79, 59.93, NA, 59.25, 86.25, 81.1…
+$ A_MEAN_St_Paul     &lt;dbl&gt; 70290, 143730, 269950, 124650, 82650, 123240, 17939…</preformat>
+    <code language="r script"># Save the adjusted St. Paul-specific dataset to an RDS and CSV file for future analysis
+saveRDS(st_paul_jobs_weighted, here(&quot;processed_data&quot;, &quot;st_paul_jobs_weighted.rds&quot;))
+write_csv(st_paul_jobs_weighted, here(&quot;processed_data&quot;, &quot;st_paul_jobs_weighted.csv&quot;))
+
+# Optional: Print some summary statistics for St. Paul-specific employment and wages
+summary_st_paul_jobs &lt;- st_paul_jobs_weighted %&gt;%
+  summarize(
+    Total_Employment = sum(TOT_EMP_St_Paul, na.rm = TRUE),
+    Mean_Hourly_Wage = mean(H_MEAN_St_Paul, na.rm = TRUE),
+    Mean_Annual_Wage = mean(A_MEAN_St_Paul, na.rm = TRUE)
+  )
+
+# Output the summary for quick analysis
+print(summary_st_paul_jobs)</code>
+    <preformat># A tibble: 1 × 3
+  Total_Employment Mean_Hourly_Wage Mean_Annual_Wage
+             &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+1          5751890             36.6           77675.</preformat>
+    <code language="r script"># Replace NA values in 'O*NET-SOC Sector' with 'Other'
+st_paul_jobs_weighted &lt;- st_paul_jobs_weighted %&gt;%
+  mutate(`O*NET-SOC Sector` = ifelse(is.na(`O*NET-SOC Sector`), &quot;Other&quot;, `O*NET-SOC Sector`))
+
+# Group by 'O*NET-SOC Sector' and calculate the total employment, mean hourly wage, and mean annual wage
+sector_summary_st_paul &lt;- st_paul_jobs_weighted %&gt;%
+  group_by(`O*NET-SOC Sector`) %&gt;%
+  summarize(
+    Total_Employment = sum(TOT_EMP_St_Paul, na.rm = TRUE),
+    Mean_Hourly_Wage = mean(H_MEAN_St_Paul, na.rm = TRUE),
+    Mean_Annual_Wage = mean(A_MEAN_St_Paul, na.rm = TRUE)
+  )
+
+# Output the sector-wise summary
+print(sector_summary_st_paul)</code>
+    <preformat># A tibble: 4 × 4
+  `O*NET-SOC Sector`          Total_Employment Mean_Hourly_Wage Mean_Annual_Wage
+  &lt;chr&gt;                                  &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+1 Energy Efficiency                      66410             45.5           94669.
+2 Green Construction                    124680             37.9           78809.
+3 Other                                5537550             36.3           77193.
+4 Renewable Energy Generation            23250             44.7           92991.</preformat>
+    <code language="r script"># Save the sector-wise summary as an RDS and CSV file for future reference
+saveRDS(sector_summary_st_paul, here(&quot;processed_data&quot;, &quot;sector_summary_st_paul.rds&quot;))
+write_csv(sector_summary_st_paul, here(&quot;processed_data&quot;, &quot;sector_summary_st_paul.csv&quot;))
+
+# Visualization for Total Employment across sectors
+hchart(sector_summary_st_paul, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = Total_Employment)) %&gt;%
+  hc_title(text = &quot;Total Employment by Sector in St. Paul&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Total Employment&quot;), labels = list(format = &quot;{value:,0f}&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:,0f}&lt;/b&gt;')</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-36-1.png" />
+    <code language="r script"># Visualization for Mean Hourly Wage across sectors
+hchart(sector_summary_st_paul, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = Mean_Hourly_Wage)) %&gt;%
+  hc_title(text = &quot;Mean Hourly Wage by Sector in St. Paul&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Mean Hourly Wage (USD)&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:.2f} USD&lt;/b&gt;')</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-36-2.png" />
+    <code language="r script"># Visualization for Mean Annual Wage across sectors
+hchart(sector_summary_st_paul, &quot;column&quot;, hcaes(x = `O*NET-SOC Sector`, y = Mean_Annual_Wage)) %&gt;%
+  hc_title(text = &quot;Mean Annual Wage by Sector in St. Paul&quot;) %&gt;%
+  hc_xAxis(title = list(text = &quot;Sector&quot;)) %&gt;%
+  hc_yAxis(title = list(text = &quot;Mean Annual Wage (USD)&quot;), labels = list(format = &quot;{value:,0f}&quot;)) %&gt;%
+  hc_tooltip(pointFormat = '&lt;b&gt;{point.y:,0f} USD&lt;/b&gt;')</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-36-3.png" />
+    <p><bold>Incorporate ACS demographics</bold>. We will merge the OEWS
+    data with the <bold>ACS</bold> data. The <bold>ACS data</bold> has
+    demographic information like education, race/ethnicity, gender, and
+    income levels. This will allow us to analyze the green job data
+    segmented by these demographic factors in <bold>St. Paul</bold>.</p>
+    <code language="r script"># Convert the O*NET-SOC code to character in both datasets
+st_paul_jobs_weighted &lt;- st_paul_jobs_weighted %&gt;%
+  mutate(`O*NET-SOC Code` = as.character(`O*NET-SOC Code`))
+
+acs_data &lt;- acs_data %&gt;%
+  mutate(`O*NET-SOC Code` = as.character(`O*NET-SOC Code`))</code>
+    <code language="r script"># Filter the ACS data to only include rows where 'Green Job Flag' is 1
+acs_green_data &lt;- acs_data %&gt;% 
+  filter(`Green Job Flag` == 1)
+
+# Check the filtered data to ensure it looks correct
+glimpse(acs_green_data)</code>
+    <preformat>Rows: 72
+Columns: 19
+$ RT                &lt;chr&gt; &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P…
+$ SERIALNO          &lt;chr&gt; &quot;2022GQ0001538&quot;, &quot;2022GQ0013624&quot;, &quot;2022GQ0025479&quot;, &quot;…
+$ DIVISION          &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4…
+$ SPORDER           &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 5, 1, 1, 2, 2, 2…
+$ PUMA20            &lt;dbl&gt; 1505, 1504, 1504, 1503, 1503, 1505, 1504, 1504, 1504…
+$ REGION            &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2…
+$ ST                &lt;dbl&gt; 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, …
+$ AGEP              &lt;dbl&gt; 54, 19, 18, 50, 20, 42, 18, 18, 50, 20, 21, 67, 45, …
+$ SOCP              &lt;chr&gt; &quot;472181&quot;, &quot;537062&quot;, &quot;537062&quot;, &quot;537062&quot;, &quot;537062&quot;, &quot;4…
+$ RAC1P             &lt;chr&gt; &quot;White alone&quot;, &quot;Asian alone&quot;, &quot;Two or More Races&quot;, &quot;…
+$ SEX               &lt;chr&gt; &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Mal…
+$ SCHL              &lt;chr&gt; &quot;GED or alternative credential&quot;, &quot;Regular high schoo…
+$ PINCP             &lt;dbl&gt; 0, 4000, 4000, 19200, 4000, 14700, 4000, 20000, 1920…
+$ ADJINC            &lt;dbl&gt; 1042311, 1042311, 1042311, 1042311, 1042311, 1042311…
+$ WAGP              &lt;dbl&gt; 0, 4000, 4000, 18000, 4000, 11100, 4000, 20000, 1800…
+$ PWGTP             &lt;dbl&gt; 1, 5, 12, 12, 8, 1, 5, 7, 12, 12, 14, 30, 35, 33, 29…
+$ `O*NET-SOC Code`  &lt;chr&gt; &quot;472181&quot;, &quot;537062&quot;, &quot;537062&quot;, &quot;537062&quot;, &quot;537062&quot;, &quot;4…
+$ `O*NET-SOC Title` &lt;chr&gt; &quot;Roofers&quot;, &quot;Laborers and Freight, Stock, and Materia…
+$ `Green Job Flag`  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</preformat>
+    <code language="r script"># Remove rows with NA O*NET-SOC Codes in both datasets before merging
+st_paul_jobs_weighted &lt;- st_paul_jobs_weighted %&gt;%
+  filter(!is.na(`O*NET-SOC Code`))
+
+acs_green_data &lt;- acs_green_data %&gt;%
+  filter(!is.na(`O*NET-SOC Code`))
+
+# Re-check the unique O*NET-SOC Codes after filtering out NA values
+unique_jobs_codes &lt;- unique(st_paul_jobs_weighted$`O*NET-SOC Code`)
+unique_acs_codes &lt;- unique(acs_green_data$`O*NET-SOC Code`)
+
+# Find codes that exist in one dataset but not the other
+missing_in_acs &lt;- setdiff(unique_jobs_codes, unique_acs_codes)
+missing_in_jobs &lt;- setdiff(unique_acs_codes, unique_jobs_codes)
+
+# Output the results
+cat(&quot;Codes in jobs but not in ACS:&quot;, missing_in_acs, &quot;\n&quot;)</code>
+    <preformat>Codes in jobs but not in ACS: 11-1021 11-3071 11-9021 13-2051 17-1011 17-1012 17-2051 17-2071 17-2141 17-3011 19-3051 47-2011 47-2031 47-2051 47-2061 47-2073 47-2111 47-2131 47-2152 47-2181 47-2211 47-2221 47-4011 47-4041 49-9021 49-9051 49-9098 51-2041 51-4041 51-4121 51-8012 51-8013 51-8021 51-9012 53-6051 53-7051 53-7062 47-5041 49-9042 19-4051 51-8011 19-4041 47-5013 13-1073 47-3012 </preformat>
+    <code language="r script">cat(&quot;Codes in ACS but not in jobs:&quot;, missing_in_jobs, &quot;\n&quot;)</code>
+    <preformat>Codes in ACS but not in jobs: 472181 537062 472061 514041 111021 472111 132051 537051 172141 172051 472152 472031 474011 113071 171011 119021 518021 </preformat>
+    <code language="r script"># Ensure the O*NET-SOC Code format is consistent
+# Remove hyphens from the codes in both datasets for consistent matching
+st_paul_jobs_weighted &lt;- st_paul_jobs_weighted %&gt;%
+  mutate(`O*NET-SOC Code` = gsub(&quot;-&quot;, &quot;&quot;, `O*NET-SOC Code`))
+
+acs_green_data &lt;- acs_green_data %&gt;%
+  mutate(`O*NET-SOC Code` = gsub(&quot;-&quot;, &quot;&quot;, `O*NET-SOC Code`))
+
+# Re-check the unique O*NET-SOC Codes after formatting
+unique_jobs_codes &lt;- unique(st_paul_jobs_weighted$`O*NET-SOC Code`)
+unique_acs_codes &lt;- unique(acs_green_data$`O*NET-SOC Code`)
+
+# Find codes that exist in one dataset but not the other
+missing_in_acs &lt;- setdiff(unique_jobs_codes, unique_acs_codes)
+missing_in_jobs &lt;- setdiff(unique_acs_codes, unique_jobs_codes)
+
+# Output the results
+cat(&quot;Codes in jobs but not in ACS:&quot;, missing_in_acs, &quot;\n&quot;)</code>
+    <preformat>Codes in jobs but not in ACS: 171012 172071 173011 193051 472011 472051 472073 472131 472211 472221 474041 499021 499051 499098 512041 514121 518012 518013 519012 536051 475041 499042 194051 518011 194041 475013 131073 473012 </preformat>
+    <code language="r script">cat(&quot;Codes in ACS but not in jobs:&quot;, missing_in_jobs, &quot;\n&quot;)</code>
+    <preformat>Codes in ACS but not in jobs:  </preformat>
+    <code language="r script"># Merge the 'st_paul_jobs_weighted' data with 'acs_green_data' using the 'O*NET-SOC Code' column
+merged_green_jobs_data &lt;- st_paul_jobs_weighted %&gt;%
+  left_join(acs_green_data, by = &quot;O*NET-SOC Code&quot;)</code>
+    <preformat>Warning in left_join(., acs_green_data, by = &quot;O*NET-SOC Code&quot;): Detected an unexpected many-to-many relationship between `x` and `y`.
+ℹ Row 1 of `x` matches multiple rows in `y`.
+ℹ Row 17 of `y` matches multiple rows in `x`.
+ℹ If a many-to-many relationship is expected, set `relationship =
+  &quot;many-to-many&quot;` to silence this warning.</preformat>
+    <code language="r script"># Check the merged data to validate the merge
+glimpse(merged_green_jobs_data)</code>
+    <preformat>Rows: 124
+Columns: 55
+$ AREA               &lt;dbl&gt; 33460, 33460, 33460, 33460, 33460, 33460, 33460, 33…
+$ AREA_TITLE         &lt;chr&gt; &quot;Minneapolis-St. Paul-Bloomington, MN-WI&quot;, &quot;Minneap…
+$ AREA_TYPE          &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, …
+$ PRIM_STATE         &lt;chr&gt; &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN…
+$ NAICS              &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+$ NAICS_TITLE        &lt;chr&gt; &quot;Cross-industry&quot;, &quot;Cross-industry&quot;, &quot;Cross-industry…
+$ I_GROUP            &lt;chr&gt; &quot;cross-industry&quot;, &quot;cross-industry&quot;, &quot;cross-industry…
+$ OWN_CODE           &lt;dbl&gt; 1235, 1235, 1235, 1235, 1235, 1235, 1235, 1235, 123…
+$ OCC_CODE           &lt;chr&gt; &quot;11-1021&quot;, &quot;11-1021&quot;, &quot;11-1021&quot;, &quot;11-1021&quot;, &quot;11-102…
+$ OCC_TITLE          &lt;chr&gt; &quot;General and Operations Managers&quot;, &quot;General and Ope…
+$ O_GROUP            &lt;chr&gt; &quot;detailed&quot;, &quot;detailed&quot;, &quot;detailed&quot;, &quot;detailed&quot;, &quot;de…
+$ TOT_EMP            &lt;dbl&gt; 48300, 48300, 48300, 48300, 48300, 48300, 2610, 261…
+$ EMP_PRSE           &lt;chr&gt; &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;3.1&quot;, &quot;3.1&quot;, &quot;3.1&quot;, …
+$ JOBS_1000          &lt;chr&gt; &quot;25.272&quot;, &quot;25.272&quot;, &quot;25.272&quot;, &quot;25.272&quot;, &quot;25.272&quot;, &quot;…
+$ LOC_QUOTIENT       &lt;chr&gt; &quot;1.09&quot;, &quot;1.09&quot;, &quot;1.09&quot;, &quot;1.09&quot;, &quot;1.09&quot;, &quot;1.09&quot;, &quot;1.…
+$ PCT_TOTAL          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ PCT_RPT            &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ H_MEAN             &lt;dbl&gt; 59.93, 59.93, 59.93, 59.93, 59.93, 59.93, 61.90, 61…
+$ A_MEAN             &lt;dbl&gt; 124650, 124650, 124650, 124650, 124650, 124650, 128…
+$ MEAN_PRSE          &lt;chr&gt; &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.1&quot;, &quot;1…
+$ H_PCT10            &lt;chr&gt; &quot;22.92&quot;, &quot;22.92&quot;, &quot;22.92&quot;, &quot;22.92&quot;, &quot;22.92&quot;, &quot;22.92…
+$ H_PCT25            &lt;chr&gt; &quot;32.21&quot;, &quot;32.21&quot;, &quot;32.21&quot;, &quot;32.21&quot;, &quot;32.21&quot;, &quot;32.21…
+$ H_MEDIAN           &lt;chr&gt; &quot;49.26&quot;, &quot;49.26&quot;, &quot;49.26&quot;, &quot;49.26&quot;, &quot;49.26&quot;, &quot;49.26…
+$ H_PCT75            &lt;chr&gt; &quot;76.63&quot;, &quot;76.63&quot;, &quot;76.63&quot;, &quot;76.63&quot;, &quot;76.63&quot;, &quot;76.63…
+$ H_PCT90            &lt;chr&gt; &quot;105.67&quot;, &quot;105.67&quot;, &quot;105.67&quot;, &quot;105.67&quot;, &quot;105.67&quot;, &quot;…
+$ A_PCT10            &lt;chr&gt; &quot;47670&quot;, &quot;47670&quot;, &quot;47670&quot;, &quot;47670&quot;, &quot;47670&quot;, &quot;47670…
+$ A_PCT25            &lt;chr&gt; &quot;66990&quot;, &quot;66990&quot;, &quot;66990&quot;, &quot;66990&quot;, &quot;66990&quot;, &quot;66990…
+$ A_MEDIAN           &lt;chr&gt; &quot;102460&quot;, &quot;102460&quot;, &quot;102460&quot;, &quot;102460&quot;, &quot;102460&quot;, &quot;…
+$ A_PCT75            &lt;chr&gt; &quot;159380&quot;, &quot;159380&quot;, &quot;159380&quot;, &quot;159380&quot;, &quot;159380&quot;, &quot;…
+$ A_PCT90            &lt;chr&gt; &quot;219800&quot;, &quot;219800&quot;, &quot;219800&quot;, &quot;219800&quot;, &quot;219800&quot;, &quot;…
+$ ANNUAL             &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ HOURLY             &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ `O*NET-SOC Code`   &lt;chr&gt; &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;…
+$ `O*NET-SOC Sector` &lt;chr&gt; &quot;Energy Efficiency&quot;, &quot;Energy Efficiency&quot;, &quot;Energy E…
+$ TOT_EMP_St_Paul    &lt;dbl&gt; 48300, 48300, 48300, 48300, 48300, 48300, 2610, 261…
+$ H_MEAN_St_Paul     &lt;dbl&gt; 59.93, 59.93, 59.93, 59.93, 59.93, 59.93, 61.90, 61…
+$ A_MEAN_St_Paul     &lt;dbl&gt; 124650, 124650, 124650, 124650, 124650, 124650, 128…
+$ RT                 &lt;chr&gt; &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;…
+$ SERIALNO           &lt;chr&gt; &quot;2022HU0005354&quot;, &quot;2022HU0054042&quot;, &quot;2022HU0097062&quot;, …
+$ DIVISION           &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, …
+$ SPORDER            &lt;dbl&gt; 2, 1, 1, 2, 1, 2, 2, 1, 1, 1, 3, 2, 1, 1, 2, 1, 1, …
+$ PUMA20             &lt;dbl&gt; 1504, 1504, 1505, 1504, 1505, 1504, 1505, 1505, 150…
+$ REGION             &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, …
+$ ST                 &lt;dbl&gt; 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27,…
+$ AGEP               &lt;dbl&gt; 67, 35, 30, 46, 64, 37, 51, 39, 22, 34, 26, 31, 60,…
+$ SOCP               &lt;chr&gt; &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;…
+$ RAC1P              &lt;chr&gt; &quot;White alone&quot;, &quot;White alone&quot;, &quot;Black or African Ame…
+$ SEX                &lt;chr&gt; &quot;Male&quot;, &quot;Female&quot;, &quot;Male&quot;, &quot;Female&quot;, &quot;Female&quot;, &quot;Male…
+$ SCHL               &lt;chr&gt; &quot;1 or more years of college credit, no degree&quot;, &quot;Ba…
+$ PINCP              &lt;dbl&gt; 41000, 50000, 38000, 30000, 0, 94000, 68000, 120000…
+$ ADJINC             &lt;dbl&gt; 1042311, 1042311, 1042311, 1042311, 1042311, 104231…
+$ WAGP               &lt;dbl&gt; 14000, 50000, 38000, 0, 0, 94000, 68000, 120000, 20…
+$ PWGTP              &lt;dbl&gt; 30, 29, 175, 25, 12, 25, 18, 35, 14, 28, 76, 27, 32…
+$ `O*NET-SOC Title`  &lt;chr&gt; &quot;General and Operations Managers&quot;, &quot;General and Ope…
+$ `Green Job Flag`   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …</preformat>
+    <code language="r script"># Save the merged dataset for future reference
+saveRDS(merged_green_jobs_data, here(&quot;processed_data&quot;, &quot;merged_green_jobs_data.rds&quot;))
+write_csv(merged_green_jobs_data, here(&quot;processed_data&quot;, &quot;merged_green_jobs_data.csv&quot;))</code>
+    <code language="r script"># Assess the number of duplicates in the merged dataset by counting occurrences of each O*NET-SOC Code
+duplication_summary &lt;- merged_green_jobs_data %&gt;%
+  group_by(`O*NET-SOC Code`) %&gt;%
+  summarise(count = n()) %&gt;%
+  arrange(desc(count))
+
+# View the summary of duplication
+print(duplication_summary)</code>
+    <preformat># A tibble: 45 × 2
+   `O*NET-SOC Code` count
+   &lt;chr&gt;            &lt;int&gt;
+ 1 537062              21
+ 2 172141              12
+ 3 472061               8
+ 4 472111               7
+ 5 111021               6
+ 6 132051               6
+ 7 172051               6
+ 8 113071               3
+ 9 171011               3
+10 172071               3
+# ℹ 35 more rows</preformat>
+    <p>If we need accurate totals or averages across jobs and
+    demographics, <bold>aggregation</bold> will be necessary to avoid
+    inflating the data.</p>
+    <p>If we feel the current level of detail (with the duplicates)
+    provides useful insights, we can keep the data as is but be mindful
+    of how you interpret summed metrics. This is what we will do. The
+    duplication is meaningful (for example, because a job can truly
+    exist in multiple sectors or demographics are validly associated
+    with multiple jobs), we choose to keep the dataset as is. This would
+    allow us to analyze the data with all the overlaps. However, we need
+    to be cautious that this doesn't skew metrics that sum values (like
+    total employment).</p>
+    <code language="r script"># # Aggregate demographic and job-related data by O*NET-SOC Code and O*NET-SOC Sector after merge
+# aggregated_data &lt;- merged_green_jobs_data %&gt;%
+#   group_by(`O*NET-SOC Code`, `O*NET-SOC Sector`, `O*NET-SOC Title`) %&gt;%
+#   summarise(
+#     Total_Employment = sum(TOT_EMP_St_Paul, na.rm = TRUE),
+#     Mean_Hourly_Wage = mean(H_MEAN_St_Paul, na.rm = TRUE),
+#     Mean_Annual_Wage = mean(A_MEAN_St_Paul, na.rm = TRUE),
+#     Average_Age = mean(AGEP, na.rm = TRUE),
+#     Proportion_Female = mean(SEX == &quot;Female&quot;, na.rm = TRUE),
+#     Proportion_Male = mean(SEX == &quot;Male&quot;, na.rm = TRUE),
+#     Average_Income = mean(PINCP, na.rm = TRUE),
+#     Proportion_White = mean(RAC1P == &quot;White alone&quot;, na.rm = TRUE),
+#     Proportion_Black = mean(RAC1P == &quot;Black or African American alone&quot;, na.rm = TRUE),
+#     Count = n()  # This column helps you see how many records were combined in this aggregation
+#   )
+# 
+# # View the aggregated data
+# glimpse(aggregated_data)</code>
+    <p><bold>Analyze the data</bold>. Once the datasets are merged, you
+    can start analyzing the data to answer your research question.</p>
+    <p>Now that we’ve merged the <bold>OEWS</bold> and <bold>ACS</bold>
+    data, we can group by the <bold>O*NET-SOC Sector</bold> (Energy
+    Efficiency, Renewable Energy Generation, Green Construction) and
+    demographic factors like <bold>education</bold>, <bold>race</bold>,
+    <bold>gender</bold>, and <bold>income</bold>.</p>
+    <code language="r script"># Convert data types
+merged_green_jobs_data &lt;- merged_green_jobs_data %&gt;%
+  mutate(
+    NAICS_TITLE = as.factor(NAICS_TITLE),  # Factor for industry titles
+    I_GROUP = as.factor(I_GROUP),  # Factor for industry group
+    O_GROUP = as.factor(O_GROUP),  # Factor for occupation group
+    H_PCT10 = as.numeric(H_PCT10),  # Convert percentages to numeric
+    H_PCT25 = as.numeric(H_PCT25),
+    H_MEDIAN = as.numeric(H_MEDIAN),
+    H_PCT75 = as.numeric(H_PCT75),
+    H_PCT90 = as.numeric(H_PCT90),
+    A_PCT10 = as.numeric(A_PCT10),
+    A_PCT25 = as.numeric(A_PCT25),
+    A_MEDIAN = as.numeric(A_MEDIAN),
+    A_PCT75 = as.numeric(A_PCT75),
+    A_PCT90 = as.numeric(A_PCT90),
+    ANNUAL = as.numeric(ANNUAL),  # Convert to numeric for consistency
+    HOURLY = as.numeric(HOURLY),
+    `O*NET-SOC Sector` = as.factor(`O*NET-SOC Sector`),  # Factor for green job sectors
+    TOT_EMP_St_Paul = as.numeric(TOT_EMP_St_Paul),  # Numeric for employment totals
+    H_MEAN_St_Paul = as.numeric(H_MEAN_St_Paul),  # Numeric for hourly wage in St. Paul
+    A_MEAN_St_Paul = as.numeric(A_MEAN_St_Paul),  # Numeric for annual wage in St. Paul
+    AGEP = as.factor(AGEP),  # Age as a factor if we treat it categorically
+    RAC1P = as.factor(RAC1P),  # Factor for race
+    SEX = as.factor(SEX),  # Factor for gender
+    SCHL = as.factor(SCHL),  # Factor for education level
+    PINCP = as.numeric(PINCP),  # Numeric for personal income
+    ADJINC = as.numeric(ADJINC),  # Numeric for adjusted income
+    WAGP = as.numeric(WAGP),  # Numeric for wage
+    PWGTP = as.numeric(PWGTP),  # Numeric for person weight
+    `Green Job Flag` = as.numeric(`Green Job Flag`)  # Yes/No as numeric
+  )</code>
+    <preformat>Warning: There were 10 warnings in `mutate()`.
+The first warning was:
+ℹ In argument: `H_PCT10 = as.numeric(H_PCT10)`.
+Caused by warning:
+! NAs introduced by coercion
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 9 remaining warnings.</preformat>
+    <code language="r script"># Double-check the changes
+glimpse(merged_green_jobs_data)</code>
+    <preformat>Rows: 124
+Columns: 55
+$ AREA               &lt;dbl&gt; 33460, 33460, 33460, 33460, 33460, 33460, 33460, 33…
+$ AREA_TITLE         &lt;chr&gt; &quot;Minneapolis-St. Paul-Bloomington, MN-WI&quot;, &quot;Minneap…
+$ AREA_TYPE          &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, …
+$ PRIM_STATE         &lt;chr&gt; &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN&quot;, &quot;MN…
+$ NAICS              &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+$ NAICS_TITLE        &lt;fct&gt; Cross-industry, Cross-industry, Cross-industry, Cro…
+$ I_GROUP            &lt;fct&gt; cross-industry, cross-industry, cross-industry, cro…
+$ OWN_CODE           &lt;dbl&gt; 1235, 1235, 1235, 1235, 1235, 1235, 1235, 1235, 123…
+$ OCC_CODE           &lt;chr&gt; &quot;11-1021&quot;, &quot;11-1021&quot;, &quot;11-1021&quot;, &quot;11-1021&quot;, &quot;11-102…
+$ OCC_TITLE          &lt;chr&gt; &quot;General and Operations Managers&quot;, &quot;General and Ope…
+$ O_GROUP            &lt;fct&gt; detailed, detailed, detailed, detailed, detailed, d…
+$ TOT_EMP            &lt;dbl&gt; 48300, 48300, 48300, 48300, 48300, 48300, 2610, 261…
+$ EMP_PRSE           &lt;chr&gt; &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;3.1&quot;, &quot;3.1&quot;, &quot;3.1&quot;, …
+$ JOBS_1000          &lt;chr&gt; &quot;25.272&quot;, &quot;25.272&quot;, &quot;25.272&quot;, &quot;25.272&quot;, &quot;25.272&quot;, &quot;…
+$ LOC_QUOTIENT       &lt;chr&gt; &quot;1.09&quot;, &quot;1.09&quot;, &quot;1.09&quot;, &quot;1.09&quot;, &quot;1.09&quot;, &quot;1.09&quot;, &quot;1.…
+$ PCT_TOTAL          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ PCT_RPT            &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ H_MEAN             &lt;dbl&gt; 59.93, 59.93, 59.93, 59.93, 59.93, 59.93, 61.90, 61…
+$ A_MEAN             &lt;dbl&gt; 124650, 124650, 124650, 124650, 124650, 124650, 128…
+$ MEAN_PRSE          &lt;chr&gt; &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.1&quot;, &quot;1…
+$ H_PCT10            &lt;dbl&gt; 22.92, 22.92, 22.92, 22.92, 22.92, 22.92, 32.84, 32…
+$ H_PCT25            &lt;dbl&gt; 32.21, 32.21, 32.21, 32.21, 32.21, 32.21, 41.03, 41…
+$ H_MEDIAN           &lt;dbl&gt; 49.26, 49.26, 49.26, 49.26, 49.26, 49.26, 53.89, 53…
+$ H_PCT75            &lt;dbl&gt; 76.63, 76.63, 76.63, 76.63, 76.63, 76.63, 74.34, 74…
+$ H_PCT90            &lt;dbl&gt; 105.67, 105.67, 105.67, 105.67, 105.67, 105.67, 99.…
+$ A_PCT10            &lt;dbl&gt; 47670, 47670, 47670, 47670, 47670, 47670, 68310, 68…
+$ A_PCT25            &lt;dbl&gt; 66990, 66990, 66990, 66990, 66990, 66990, 85340, 85…
+$ A_MEDIAN           &lt;dbl&gt; 102460, 102460, 102460, 102460, 102460, 102460, 112…
+$ A_PCT75            &lt;dbl&gt; 159380, 159380, 159380, 159380, 159380, 159380, 154…
+$ A_PCT90            &lt;dbl&gt; 219800, 219800, 219800, 219800, 219800, 219800, 207…
+$ ANNUAL             &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ HOURLY             &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+$ `O*NET-SOC Code`   &lt;chr&gt; &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;…
+$ `O*NET-SOC Sector` &lt;fct&gt; Energy Efficiency, Energy Efficiency, Energy Effici…
+$ TOT_EMP_St_Paul    &lt;dbl&gt; 48300, 48300, 48300, 48300, 48300, 48300, 2610, 261…
+$ H_MEAN_St_Paul     &lt;dbl&gt; 59.93, 59.93, 59.93, 59.93, 59.93, 59.93, 61.90, 61…
+$ A_MEAN_St_Paul     &lt;dbl&gt; 124650, 124650, 124650, 124650, 124650, 124650, 128…
+$ RT                 &lt;chr&gt; &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;…
+$ SERIALNO           &lt;chr&gt; &quot;2022HU0005354&quot;, &quot;2022HU0054042&quot;, &quot;2022HU0097062&quot;, …
+$ DIVISION           &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, …
+$ SPORDER            &lt;dbl&gt; 2, 1, 1, 2, 1, 2, 2, 1, 1, 1, 3, 2, 1, 1, 2, 1, 1, …
+$ PUMA20             &lt;dbl&gt; 1504, 1504, 1505, 1504, 1505, 1504, 1505, 1505, 150…
+$ REGION             &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, …
+$ ST                 &lt;dbl&gt; 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27,…
+$ AGEP               &lt;fct&gt; 67, 35, 30, 46, 64, 37, 51, 39, 22, 34, 26, 31, 60,…
+$ SOCP               &lt;chr&gt; &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;111021&quot;, &quot;…
+$ RAC1P              &lt;fct&gt; White alone, White alone, Black or African American…
+$ SEX                &lt;fct&gt; Male, Female, Male, Female, Female, Male, Male, Mal…
+$ SCHL               &lt;fct&gt; &quot;1 or more years of college credit, no degree&quot;, &quot;Ba…
+$ PINCP              &lt;dbl&gt; 41000, 50000, 38000, 30000, 0, 94000, 68000, 120000…
+$ ADJINC             &lt;dbl&gt; 1042311, 1042311, 1042311, 1042311, 1042311, 104231…
+$ WAGP               &lt;dbl&gt; 14000, 50000, 38000, 0, 0, 94000, 68000, 120000, 20…
+$ PWGTP              &lt;dbl&gt; 30, 29, 175, 25, 12, 25, 18, 35, 14, 28, 76, 27, 32…
+$ `O*NET-SOC Title`  &lt;chr&gt; &quot;General and Operations Managers&quot;, &quot;General and Ope…
+$ `Green Job Flag`   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …</preformat>
+    <p>To group by the <monospace>O*NET-SOC Sector</monospace> and
+    demographic factors like <monospace>education</monospace>,
+    <monospace>race</monospace>, <monospace>gender</monospace>, and
+    <monospace>income</monospace>, we can create summary statistics for
+    each sector to analyze how the green jobs are distributed across
+    different demographic categories.</p>
+    <code language="r script"># Group the data by sector and demographic variables, then summarize the counts and income
+green_job_summary &lt;- merged_green_jobs_data %&gt;%
+  group_by(`O*NET-SOC Sector`, SCHL, RAC1P, SEX) %&gt;%
+  summarise(
+    total_jobs = n(),  # Count total jobs
+    mean_income = mean(PINCP, na.rm = TRUE)  # Calculate mean income for each group
+  )</code>
+    <preformat>`summarise()` has grouped output by 'O*NET-SOC Sector', 'SCHL', 'RAC1P'. You
+can override using the `.groups` argument.</preformat>
+    <code language="r script"># View the summarized data
+print(green_job_summary)</code>
+    <preformat># A tibble: 52 × 6
+# Groups:   O*NET-SOC Sector, SCHL, RAC1P [46]
+   `O*NET-SOC Sector` SCHL                    RAC1P SEX   total_jobs mean_income
+   &lt;fct&gt;              &lt;fct&gt;                   &lt;fct&gt; &lt;fct&gt;      &lt;int&gt;       &lt;dbl&gt;
+ 1 Energy Efficiency  1 or more years of col… Whit… Fema…          1      15000 
+ 2 Energy Efficiency  1 or more years of col… Whit… Male           1      41000 
+ 3 Energy Efficiency  Associate's degree      Whit… Male           1      46500 
+ 4 Energy Efficiency  Bachelor's degree       Two … Fema…          1     102000 
+ 5 Energy Efficiency  Bachelor's degree       Whit… Fema…          2      40000 
+ 6 Energy Efficiency  Bachelor's degree       Whit… Male           3     126417.
+ 7 Energy Efficiency  Grade 9                 Whit… Fema…          1          0 
+ 8 Energy Efficiency  Master's degree         Asia… Male           1      80000 
+ 9 Energy Efficiency  Master's degree         Whit… Fema…          1     113250 
+10 Energy Efficiency  Regular high school di… Whit… Male           1      94000 
+# ℹ 42 more rows</preformat>
+    <code language="r script"># Remove rows with NA in 'SCHL' or 'O*NET-SOC Sector'
+cleaned_green_job_summary &lt;- green_job_summary %&gt;%
+  filter(!is.na(SCHL), !is.na(`O*NET-SOC Sector`))
+
+# Bar plot for green jobs by sector and education level
+ggplot(cleaned_green_job_summary, aes(x = `O*NET-SOC Sector`, y = total_jobs, fill = SCHL)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  labs(title = &quot;Green Jobs by Sector and Education Level&quot;,
+       x = &quot;Green Job Sector&quot;, y = &quot;Total Jobs&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-45-1.png" />
+    <code language="r script"># Plot percentage of jobs by sector and education level
+green_job_summary_percentage &lt;- merged_green_jobs_data %&gt;%
+  group_by(`O*NET-SOC Sector`, SCHL) %&gt;%
+  summarise(total_jobs = n()) %&gt;%
+  mutate(percentage_jobs = total_jobs / sum(total_jobs) * 100)</code>
+    <preformat>`summarise()` has grouped output by 'O*NET-SOC Sector'. You can override using
+the `.groups` argument.</preformat>
+    <code language="r script">ggplot(green_job_summary_percentage, aes(x = `O*NET-SOC Sector`, y = percentage_jobs, fill = SCHL)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  labs(title = &quot;Percentage of Green Jobs by Sector and Education Level&quot;,
+       x = &quot;Green Job Sector&quot;, y = &quot;Percentage of Total Jobs&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-45-2.png" />
+    <code language="r script"># Bar plot for green jobs by sector and race
+ggplot(green_job_summary, aes(x = `O*NET-SOC Sector`, y = total_jobs, fill = RAC1P)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  labs(title = &quot;Green Jobs by Sector and Race&quot;,
+       x = &quot;Green Job Sector&quot;, y = &quot;Total Jobs&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-46-1.png" />
+    <code language="r script"># Bar plot for green jobs by sector and race (percentage)
+green_job_race_percentage &lt;- merged_green_jobs_data %&gt;%
+  group_by(`O*NET-SOC Sector`, RAC1P) %&gt;%
+  summarise(total_jobs = n()) %&gt;%
+  mutate(percentage_jobs = total_jobs / sum(total_jobs) * 100)</code>
+    <preformat>`summarise()` has grouped output by 'O*NET-SOC Sector'. You can override using
+the `.groups` argument.</preformat>
+    <code language="r script">ggplot(green_job_race_percentage, aes(x = `O*NET-SOC Sector`, y = percentage_jobs, fill = RAC1P)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  labs(title = &quot;Percentage of Green Jobs by Sector and Race&quot;,
+       x = &quot;Green Job Sector&quot;, y = &quot;Percentage of Total Jobs&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-46-2.png" />
+    <code language="r script"># Bar plot for green jobs by sector and gender
+ggplot(green_job_summary, aes(x = `O*NET-SOC Sector`, y = total_jobs, fill = SEX)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  labs(title = &quot;Green Jobs by Sector and Gender&quot;,
+       x = &quot;Green Job Sector&quot;, y = &quot;Total Jobs&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-47-1.png" />
+    <code language="r script"># Bar plot for green jobs by sector and gender (percentage)
+green_job_gender_percentage &lt;- merged_green_jobs_data %&gt;%
+  group_by(`O*NET-SOC Sector`, SEX) %&gt;%
+  summarise(total_jobs = n()) %&gt;%
+  mutate(percentage_jobs = total_jobs / sum(total_jobs) * 100)</code>
+    <preformat>`summarise()` has grouped output by 'O*NET-SOC Sector'. You can override using
+the `.groups` argument.</preformat>
+    <code language="r script">ggplot(green_job_gender_percentage, aes(x = `O*NET-SOC Sector`, y = percentage_jobs, fill = SEX)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  labs(title = &quot;Percentage of Green Jobs by Sector and Gender&quot;,
+       x = &quot;Green Job Sector&quot;, y = &quot;Percentage of Total Jobs&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-47-2.png" />
+    <code language="r script"># Box plot for income distribution by sector and education level
+ggplot(merged_green_jobs_data, aes(x = `O*NET-SOC Sector`, y = PINCP, fill = RAC1P)) +
+  geom_boxplot() +
+  labs(title = &quot;Income Distribution by Sector and Education Level&quot;,
+       x = &quot;Green Job Sector&quot;, y = &quot;Personal Income&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code>
+    <preformat>Warning: Removed 38 rows containing non-finite outside the scale range
+(`stat_boxplot()`).</preformat>
+    <graphic mimetype="image" mime-subtype="png" xlink:href="index_files/figure-jats/unnamed-chunk-48-1.png" />
+  </sec>
+</sec>
+</body>
+
+<back>
+</back>
+
+<!-- (F2ED4C6E)[nb-article]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/index.qmd -->
+<!-- (F2ED4C6E)[nb-1]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/St. Paul Green Jobs - ACS.ipynb -->
+<!-- (F2ED4C6E)[nb-2]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/National Green Jobs - ACS - Raw.ipynb -->
+<!-- (F2ED4C6E)[nb-3]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/St. Paul Green Jobs - OEWS.ipynb -->
+<!-- (F2ED4C6E)[nb-4]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/St. Paul Green Jobs - Jobs.ipynb -->
+<!-- (F2ED4C6E)[nb-5]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/OWES+O_NET - St-Paul.ipynb -->
+<!-- (F2ED4C6E)[nb-6]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/National Green Jobs - ACS - Processed.ipynb -->
+<!-- (F2ED4C6E)[nb-7]:/Users/elhamali/Documents/Data Projects/climate-equity-workforce/notebooks/OWES+O_NET - National.ipynb -->
+
+</article>

@@ -1,5 +1,5 @@
 ---
-title: Climate resilience requires equitable access to quality green energy jobs. St. Paul is at the forefront.
+title: Climate resilience requires equitable access to quality green energy jobs. The City of Saint Paul is at the forefront.
 author:
   - name: Elham Ali
     corresponding: true
@@ -61,7 +61,7 @@ The data for this project comes from:
 -   Invest.gov
 -   Geocorr from the Missouri Census Data Center
 
-I will reduce each large dataset to focus only on questions related to green jobs and job quality. Please note that some datasets have already been pre-processed in Python with specific filters applied. You can find the original raw datasets in the data folder for reference.
+I will reduce each large dataset to focus only on questions related to green jobs and job quality. Please note that some datasets have already been pre-processed in Python with specific filters applied. We can find the original raw datasets in the data folder for reference.
 
 ## Analysis
 
@@ -88,6 +88,7 @@ library(highcharter)
 library(igraph)
 library(RColorBrewer)
 library(htmlwidgets)
+library(gt)
 # library(viridis)
 ```
 
@@ -867,19 +868,193 @@ write.csv(job_type_summary_st_paul, here("processed_data", "st_paul_job_type_sum
 ::: callout-note
 ## RQ 3: What is the quality of these green jobs? How much do they pay? What qualifications are needed (education and experience) nationally?
 
-TBD
+**Higher education** is associated with better-quality green jobs, particularly in the energy efficiency sector. Most high- and medium-quality jobs in energy efficiency require at least a Bachelor's Degree.
+
+**Individuals with lower education levels** are more likely to end up in green construction, especially in lower-quality jobs. Energy efficiency tends to offer a better quality of jobs across all education levels, with strong representation in both high and medium-quality segments.
+
+**Union membership** is **associated** with **higher-quality jobs** in all three sectors, particularly in energy efficiency and renewable energy generation, where a majority of high-quality jobs are unionized.
 :::
 
-[**Job_Info_Merged**](https://docs.google.com/spreadsheets/d/1kKarz2K1ds0tSfiO-CWi5Wu_wHt1S39JMqsTh0a95y8/edit?gid=842759689#gid=842759689) joins all of the job related data together to make it a bit easier to look at.
+```{r}
+# Import green job quality data
+quality_green_jobs <- read_csv(here("processed_data", "Job_Info_Merged_All_Green.csv"))
 
-[**Clean Energy Job Quality and Education Data**](https://docs.google.com/spreadsheets/d/1AFfj5L2_RBNBCw6isvVu1QkiP9rWuKia/edit?usp=drive_link)
+saveRDS(quality_green_jobs, here("processed_data", "quality_green_jobs.rds"))
+
+quality_green_jobs <- readRDS(here("processed_data", "quality_green_jobs.rds"))
+```
+
+Now, let's transform this dataframe so it's visualization-ready.
+
+```{r}
+# Rename columns to snake_case format
+quality_green_jobs <- quality_green_jobs %>%
+  rename(
+    report_occupation = `Reported Occupation`,
+    onet_soc_code = `O*NET-SOC Code`,
+    onet_soc_title = `O*NET-SOC Title`,
+    onet_soc_category = `O*NET-SOC Category`,
+    onet_soc_sector = `O*NET-SOC Sector`,
+    renewable_energy_generation = `Renewable Energy Generation`,
+    energy_efficiency = `Energy Efficiency`,
+    green_construction = `Green Construction`,
+    benchmark_total = `Benchmark Total`,
+    wage = Wage,
+    forty_hours = `40 hours`,
+    schedule = Schedule,
+    health_ins = `Health Ins`,
+    retirement = Retirement,
+    growth = Growth,
+    unemployment = Unemployment,
+    illness_injury = `Illness/injury`,
+    ojt = OJT,
+    union = Union,
+    autonomy_benchmark = autonomy_benchmark,
+    quality = quality,
+    education = education,
+    matrix_title = `2022 National Employment Matrix title`,
+    matrix_code = `2022 National Employment Matrix code`,
+    typical_education_needed = `Typical education needed for entry`,
+    work_experience_related = `Work experience in a related occupation`,
+    on_the_job_training = `Typical on-the-job training needed to attain competency in the occupation`
+  )
+```
+
+```{r}
+# Convert the variables to the correct types
+quality_green_jobs <- quality_green_jobs %>%
+  mutate(
+    # Factors
+    onet_soc_category = factor(onet_soc_category),
+    onet_soc_sector = factor(onet_soc_sector),
+    quality = factor(quality, levels = c("Low Quality", "Medium Quality", "High Quality")),
+    education = factor(education),
+    typical_education_needed = factor(typical_education_needed),
+    work_experience_related = factor(work_experience_related),
+    on_the_job_training = factor(on_the_job_training),
+    
+    # Yes/No columns as numeric (1 for Yes, 0 for No)
+    renewable_energy_generation = as.numeric(renewable_energy_generation),
+    energy_efficiency = as.numeric(energy_efficiency),
+    green_construction = as.numeric(green_construction),
+    wage = as.numeric(wage),
+    forty_hours = as.numeric(forty_hours),
+    schedule = as.numeric(schedule),
+    health_ins = as.numeric(health_ins),
+    retirement = as.numeric(retirement),
+    growth = as.numeric(growth),
+    unemployment = as.numeric(unemployment),
+    illness_injury = as.numeric(illness_injury),
+    ojt = as.numeric(ojt),
+    union = as.numeric(union),
+    autonomy_benchmark = as.numeric(autonomy_benchmark)
+  )
+```
+
+```{r}
+# Visualize quality jobs compared across sectors
+quality_summary <- quality_green_jobs %>%
+  gather(key = "sector", value = "is_green_job", renewable_energy_generation, energy_efficiency, green_construction) %>%
+  filter(is_green_job == 1) %>%
+  group_by(sector, quality) %>%
+  summarise(count = n()) %>%
+  mutate(percentage = count / sum(count) * 100)
+
+ggplot(quality_summary, aes(x = sector, y = percentage, fill = quality)) +
+  geom_bar(stat = "identity", position = "fill", width = 0.7) +
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_fill(vjust = 0.5), size = 4) +
+  labs(x = "Sector", y = "Percentage", title = "Green Job Quality by Sector") +
+  scale_fill_manual(values = c("High Quality" = "#1f77b4", "Medium Quality" = "#ffbb78", "Low Quality" = "#2ca02c")) +
+  theme_minimal() +
+  theme(legend.title = element_blank())
+```
+
+```{r}
+# Visualize quality jobs compared for sector, education, and quality
+quality_summary_education <- quality_green_jobs %>%
+  gather(key = "sector", value = "is_green_job", renewable_energy_generation, energy_efficiency, green_construction) %>%
+  filter(is_green_job == 1) %>%
+  group_by(sector, quality, education) %>%
+  summarise(count = n()) %>%
+  mutate(percentage = count / sum(count) * 100)
+
+ggplot(quality_summary_education, aes(x = education, y = percentage, fill = sector)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ quality, ncol = 1, scales = "free_y") + # Separate the quality levels
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  labs(x = "Education Level", y = "Percentage", title = "Green Job Quality by Sector and Education") +
+  theme_minimal() +
+  theme(legend.title = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+This graph shows how the distribution of green jobs (energy efficiency, green construction, renewable energy generation) varies across different levels of education, segmented by job quality (Low, Medium, High quality).
+
+Based on the above graph:
+
+-   **Energy Efficiency** consistently dominates high-quality and medium-quality green jobs across most education levels, suggesting that this sector offers the most secure and rewarding jobs for those with varying levels of education.
+
+-   **Green Construction** has a significant presence in low-quality and medium-quality jobs, especially for those with lower education levels (such as high school diplomas or no formal educational credentials).
+
+-   **Renewable Energy Generation** seems to have fewer high-quality job opportunities compared to energy efficiency, but it does offer medium-quality opportunities, particularly for those with lower education levels.
+
+```{r}
+# Visualize quality jobs compared for sector, union membership, and quality
+quality_summary_union <- quality_green_jobs %>%
+  gather(key = "sector", value = "is_green_job", renewable_energy_generation, energy_efficiency, green_construction) %>%
+  filter(is_green_job == 1) %>%
+  group_by(sector, quality, union) %>%
+  summarise(count = n()) %>%
+  mutate(percentage = count / sum(count) * 100)
+
+ggplot(quality_summary_union, aes(x = as.factor(union), y = percentage, fill = sector)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ quality, ncol = 1, scales = "free_y") + # Separate the quality levels
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  labs(x = "Union Membership", y = "Percentage", title = "Green Job Quality by Sector and Union Membership") +
+  theme_minimal() +
+  theme(legend.title = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+The above graph shows green job quality segmented by union membership across three sectors: **Energy Efficiency**, **Green Construction**, and **Renewable Energy Generation**.
+
+-   **Union membership** is **associated** with **higher-quality jobs** in all three sectors, particularly in energy efficiency and renewable energy generation, where a majority of high-quality jobs are unionized. This suggests that **unions play a significant role in securing better working conditions and benefits** for workers in green jobs.
+
+-   **Medium-quality jobs** also show a clear advantage for unionized workers across the sectors, particularly in green construction and renewable energy generation.
+
+-   The presence of **union coverage even in low-quality jobs** across sectors might indicate that unionized jobs are spread across different quality categories, though the majority of benefits seem to concentrate in medium- and high-quality roles.
+
+```{r}
+# Export the green quality jobs data to CSV for graphing
+saveRDS(quality_green_jobs, here("processed_data", "quality_green_jobs.rds"))
+
+write_csv(quality_green_jobs, here("processed_data", "quality_green_jobs.csv"))
+```
 
 ### 4. Demographics of Green Job Recipients
 
 ::: callout-note
-## RQ 4: Who is getting these green jobs, based on education, race/ethnicity, gender, and income levels in the City of Saint Paul?
+## RQ 4: Who is getting quality green jobs, based on education, race/ethnicity, gender, and income levels in the City of Saint Paul?
 
 Of the more than **303,820 people** who live in **St. Paul**, **50.5%** are women, which is aligned with the national average. The majority of residents in St. Paul are **white** (54.3%). **Black or African American people** (15.6%) make up the largest community of color in the city. Other **communities of color,** including Asian (18.4%), Alaska and Native American (0.7%), Hispanic or Latino (8.6%) and Two or More Races (7.8%), make up about 41.5% of the population. Around **42.8% of people aged 25 and older have a bachelor's degree** in St. Paul, which is higher than the national rate of 34% but lower than Minneapolis' 54%.
+
+Across all sectors and job quality categories in Saint Paul, **men are significantly overrepresented** in green jobs, particularly in high and medium-quality jobs. This is consistent across energy efficiency, green construction, and renewable energy generation. **Women** are particularly underrepresented in high and medium-quality jobs across all sectors, especially in green construction and renewable energy generation. 
+
+Across all three sectors and job quality levels, **white individuals are heavily overrepresented**, particularly in high and medium-quality jobs. This trend is consistent across energy efficiency, green construction, and renewable energy generation. **People of color,** particularly American Indian, Black or African American, and individuals from some other races, are underrepresented in high-quality jobs across all sectors. While there is some representation in low and medium-quality jobs, these groups still have limited access to the higher-quality roles.
+
+**Higher education,** particularly bachelor's degrees and professional degrees beyond a bachelor's, plays a significant role in accessing **high-quality green jobs** across all sectors in Saint Paul. In sectors like energy efficiency, having a bachelor's degree appears to be almost a prerequisite for high-quality roles.
+
+**Medium-quality jobs** tend to be more accessible to individuals with a wider variety of educational backgrounds, including those with high school diplomas, GEDs, and some college education.
+
+**Lower educational attainment** is more common in low-quality jobs across all sectors. Individuals with high school diplomas or GEDs are more likely to be found in low-quality roles in all sectors.
+
+Across all sectors and job quality categories, **white workers tend to have higher income** ranges compared to other racial groups. This disparity is most pronounced in high-quality jobs, where White workers dominate the upper-income brackets.
+
+While other racial groups are present in high-quality jobs, **their income distribution is narrower and lower than that of white workers.** Asian workers in green construction are the closest to White workers in terms of income distribution, but other racial groups, such as Black or African American workers, tend to earn significantly less.
+
+**Low-quality jobs** show more clustering toward lower-income brackets across all racial groups, with fewer opportunities for higher earnings. While white workers still tend to earn more in low-quality jobs, the income gap is narrower compared to higher-quality roles.
 :::
 
 In the following figures, we describe the challenges women and people of color in Saint Paul are likely to face in equitably accessing the jobs that may be created through BIL and IRA funding in three specific sectors: energy efficiency, renewable-energy generation, and green construction.
@@ -904,48 +1079,15 @@ In the following figures, we describe the challenges women and people of color i
 4.  Merge demographic data (from ACS) with the estimated job/wage data from OEWS.
 5.  Analyze the final dataset for insights into who holds green jobs in St. Paul.
 
-**2023 Occupational Employment and Wage Survey**
+We will first need to load the **OEWS** data (Occupational Employment and Wage Survey) and the **Geocorr** data (geographic weights from the Missouri Census Data Center) into R.
 
-✅[National level data](https://docs.google.com/spreadsheets/d/1I2munGunOJgdI2iWRW7p0BVU0O13r4zb/edit?gid=1944656488#gid=1944656488)
+-   **OEWS:** processed_data/OWES_and_ONET_St_Paul
 
-✅[Minneapolis-St. Paul-Bloomington, MN-WI](https://docs.google.com/spreadsheets/d/105RYiRn-1LIVC-iUdCD3fCKROfOGH_M62s45gbo7GFM/edit?gid=2141627594#gid=2141627594)
+-   **Geocorr:** raw_data/Geocorr from the Missouri Census Data Center - Minnesota.xlsx
 
-**Geocorr from the Missouri Census Data Center**
+We have the **ACS (American Community Survey)** data that provides demographic information (education, race, gender, income), so we'll load that as well.
 
-[Minnesota Level ](https://docs.google.com/spreadsheets/d/1wRr-jATTjaXpErUfSCAZsoSn-lt1-TZtWv_Hoq2C29Q/edit?gid=1877088889#gid=1877088889): Contains data mapping PUMAs to Metropolitan Statistical Areas and PUMAs to cities
-
-**Processed** 
-
-[St. Paul - ACS PUMS - Five Years + O\*NET Green Jobs](https://drive.google.com/file/d/1uyRoXlExkExjlJytEh8meqD3D--4Hwj4/view?usp=drive_link)
-
-[National - ACS PUMS - Five Years + O\*NET Green Jobs](https://drive.google.com/file/d/1C3opSLifg144MIYnISHmf7wwZuAe2TQJ/view?usp=drive_link)
-
-You will first need to load the **OEWS** data (Occupational Employment and Wage Survey) and the **Geocorr** data (geographic weights from the Missouri Census Data Center) into R.
-
-**OEWS:** processed_data/OWES_and_ONET_St_Paul
-
-**Geocorr:** raw_data/Geocorr from the Missouri Census Data Center - Minnesota.xlsx
-
-If you have the **ACS (American Community Survey)** data that provides demographic information (education, race, gender, income), you'll load that as well.
-
-**ACS:** processed_data/St_Paul_ACS_All_Jobs.csv
-
-```         
-1.  Load the Data:
-•   
-
-3.  Use Geocorr to Apply Weights:
-•   The Geocorr data provides the geographic weights that represent the population of St. Paul relative to the larger metro area.
-•   The purpose of this step is to adjust the OEWS data to better represent St. Paul specifically.
-•   You will calculate the percentage of St. Paul’s population in the larger metro area using Geocorr and apply this as a weight to the OEWS data.
-4.  Estimate St. Paul-Specific Data:
-•   Multiply the employment numbers and wages in the OEWS data by the St. Paul weight to get St. Paul-specific employment and wage estimates.
-5.  Incorporate ACS Demographics:
-•   You will merge the OEWS data with the ACS data. The ACS data should have demographic information like education, race/ethnicity, gender, and income levels.
-•   This will allow you to analyze the green job data segmented by these demographic factors in St. Paul.
-6.  Analyze the Data:
-•   Once the datasets are merged, you can start analyzing the data to answer your research question: Who is getting green jobs in St. Paul?
-```
+-   **ACS:** processed_data/St_Paul_ACS_All_Jobs.csv
 
 **Load the OEWS data** (Occupational Employment and Wage Survey), the Geocorr data (geographic weights from the Missouri Census Data Center), and the ACS (American Community Survey) data that provides demographic information (education, race, gender, income). The OEWS Data: is already filtered to the Minneapolis-St. Paul-Bloomington, MN-WI Metro Area.
 
@@ -964,9 +1106,9 @@ saveRDS(acs_data, here("processed_data", "acs_data.rds"))
 acs_data <- readRDS(here("processed_data", "acs_data.rds"))
 ```
 
-**Use Geocorr to apply weights.** The **Geocorr** data provides the geographic weights that represent the population of St. Paul relative to the larger metro area.The purpose of this step is to adjust the OEWS data to better represent **St. Paul** specifically. We will calculate the percentage of St. Paul\'s population in the larger metro area using **Geocorr** and apply this as a weight to the OEWS data.
+**Use Geocorr to apply weights.** The **Geocorr** data provides the geographic weights that represent the population of St. Paul relative to the larger metro area.The purpose of this step is to adjust the OEWS data to better represent **St. Paul** specifically. We will calculate the percentage of St. Paul's population in the larger metro area using **Geocorr** and apply this as a weight to the OEWS data.
 
-Since we are working with PUMAs (Public Use Microdata Areas) and need to adjust the OEWS data for St. Paul using the Geocorr weights, we\'ll focus on using:
+Since we are working with PUMAs (Public Use Microdata Areas) and need to adjust the OEWS data for St. Paul using the Geocorr weights, we'll focus on using:
 
 -   `Total population (2020 Census)` to understand the population of each PUMA.
 
@@ -998,7 +1140,7 @@ cat("Metro area population:", format(metro_population, big.mark = ",", scientifi
 
 **Estimate St. Paul-specific data**. Multiply the employment numbers and wages in the **OEWS** data by the St. Paul weight to get **St. Paul-specific** employment and wage estimates.
 
-We\'ll multiply the employment numbers (TOT_EMP) and wages (H_MEAN and A_MEAN) from the **OEWS** dataset by this St. Paul weight to get **St. Paul-specific estimates**.
+We'll multiply the employment numbers (TOT_EMP) and wages (H_MEAN and A_MEAN) from the **OEWS** dataset by this St. Paul weight to get **St. Paul-specific estimates**.
 
 ```{r}
 # Ensure that the necessary columns are numeric
@@ -1091,32 +1233,295 @@ acs_data <- acs_data %>%
 ```
 
 ```{r}
-# # Now, merge the OEWS weighted data with the ACS demographics data using the 'O*NET-SOC Code' column wuth many-to-many relationship
-# merged_data <- st_paul_jobs_weighted %>%
-#   left_join(acs_data, by = "O*NET-SOC Code", relationship = "many-to-many")
-# 
-# # Save the merged dataset for future reference
-# saveRDS(merged_data, here("processed_data", "merged_st_paul_jobs_acs.rds"))
-# write_csv(merged_data, here("processed_data", "merged_st_paul_jobs_acs.csv"))
-# 
-# ################################
-# 
-# # Ensure distinct values of O*NET-SOC Code in ACS data to avoid duplication
-# distinct_acs_data <- acs_data %>%
-#   distinct(`O*NET-SOC Code`, .keep_all = TRUE)  # Keeping unique rows
-# 
-# # Merge the distinct ACS data with the OEWS data
-# merged_data <- st_paul_jobs_weighted %>%
-#   left_join(distinct_acs_data, by = "O*NET-SOC Code", relationship = "many-to-many")
-# 
-# # Check the count of Green Job Flag after merging
-# sum(merged_data$`Green Job Flag`, na.rm = TRUE)  # Compare with the original count of 72
+# Filter the ACS data to only include rows where 'Green Job Flag' is 1
+acs_green_data <- acs_data %>% 
+  filter(`Green Job Flag` == 1)
+
+# Check the filtered data to ensure it looks correct
+glimpse(acs_green_data)
 ```
 
-**Analyze the data**. Once the datasets are merged, you can start analyzing the data to answer your research question.
+```{r}
+# Remove rows with NA O*NET-SOC Codes in both datasets before merging
+st_paul_jobs_weighted <- st_paul_jobs_weighted %>%
+  filter(!is.na(`O*NET-SOC Code`))
 
-Now that we\'ve merged the **OEWS** and **ACS** data, we can group by the **O\*NET-SOC Sector** (Energy Efficiency, Renewable Energy Generation, Green Construction) and demographic factors like **education**, **race**, **gender**, and **income**.
+acs_green_data <- acs_green_data %>%
+  filter(!is.na(`O*NET-SOC Code`))
+
+# Re-check the unique O*NET-SOC Codes after filtering out NA values
+unique_jobs_codes <- unique(st_paul_jobs_weighted$`O*NET-SOC Code`)
+unique_acs_codes <- unique(acs_green_data$`O*NET-SOC Code`)
+
+# Find codes that exist in one dataset but not the other
+missing_in_acs <- setdiff(unique_jobs_codes, unique_acs_codes)
+missing_in_jobs <- setdiff(unique_acs_codes, unique_jobs_codes)
+
+# Output the results
+cat("Codes in jobs but not in ACS:", missing_in_acs, "\n")
+cat("Codes in ACS but not in jobs:", missing_in_jobs, "\n")
+
+# Ensure the O*NET-SOC Code format is consistent
+# Remove hyphens from the codes in both datasets for consistent matching
+st_paul_jobs_weighted <- st_paul_jobs_weighted %>%
+  mutate(`O*NET-SOC Code` = gsub("-", "", `O*NET-SOC Code`))
+
+acs_green_data <- acs_green_data %>%
+  mutate(`O*NET-SOC Code` = gsub("-", "", `O*NET-SOC Code`))
+
+# Re-check the unique O*NET-SOC Codes after formatting
+unique_jobs_codes <- unique(st_paul_jobs_weighted$`O*NET-SOC Code`)
+unique_acs_codes <- unique(acs_green_data$`O*NET-SOC Code`)
+
+# Find codes that exist in one dataset but not the other
+missing_in_acs <- setdiff(unique_jobs_codes, unique_acs_codes)
+missing_in_jobs <- setdiff(unique_acs_codes, unique_jobs_codes)
+
+# Output the results
+cat("Codes in jobs but not in ACS:", missing_in_acs, "\n")
+cat("Codes in ACS but not in jobs:", missing_in_jobs, "\n")
+```
 
 ```{r}
+# Merge the 'st_paul_jobs_weighted' data with 'acs_green_data' using the 'O*NET-SOC Code' column
+merged_green_jobs_data <- st_paul_jobs_weighted %>%
+  left_join(acs_green_data, by = "O*NET-SOC Code")
 
+# Save the merged dataset for future reference
+saveRDS(merged_green_jobs_data, here("processed_data", "merged_green_jobs_data.rds"))
+write_csv(merged_green_jobs_data, here("processed_data", "merged_green_jobs_data.csv"))
+```
+
+```{r}
+# Assess the number of duplicates in the merged dataset by counting occurrences of each O*NET-SOC Code
+duplication_summary <- merged_green_jobs_data %>%
+  group_by(`O*NET-SOC Code`) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# View the summary of duplication
+print(duplication_summary)
+```
+
+If we need accurate totals or averages across jobs and demographics, **aggregation** will be necessary to avoid inflating the data.
+
+If we feel the current level of detail (with the duplicates) provides useful insights, we can keep the data as is but be mindful of how we interpret summed metrics. This is what we will do. The duplication is meaningful (for example, because a job can truly exist in multiple sectors or demographics are validly associated with multiple jobs), we choose to keep the dataset as is. This would allow us to analyze the data with all the overlaps. However, we need to be cautious that this doesn't skew metrics that sum values (like total employment).
+
+**Analyze the data**. Once the datasets are merged, we can start analyzing the data to answer our research question.
+
+Now that we've merged the **OEWS** and **ACS** data, we can group by the **O\*NET-SOC Sector** (Energy Efficiency, Renewable Energy Generation, Green Construction) and demographic factors like **education**, **race**, **gender**, and **income**.
+
+```{r}
+# Convert data types
+merged_green_jobs_data <- merged_green_jobs_data %>%
+  mutate(
+    NAICS_TITLE = as.factor(NAICS_TITLE),  # Factor for industry titles
+    I_GROUP = as.factor(I_GROUP),  # Factor for industry group
+    O_GROUP = as.factor(O_GROUP),  # Factor for occupation group
+    H_PCT10 = as.numeric(H_PCT10),  # Convert percentages to numeric
+    H_PCT25 = as.numeric(H_PCT25),
+    H_MEDIAN = as.numeric(H_MEDIAN),
+    H_PCT75 = as.numeric(H_PCT75),
+    H_PCT90 = as.numeric(H_PCT90),
+    A_PCT10 = as.numeric(A_PCT10),
+    A_PCT25 = as.numeric(A_PCT25),
+    A_MEDIAN = as.numeric(A_MEDIAN),
+    A_PCT75 = as.numeric(A_PCT75),
+    A_PCT90 = as.numeric(A_PCT90),
+    ANNUAL = as.numeric(ANNUAL),  # Convert to numeric for consistency
+    HOURLY = as.numeric(HOURLY),
+    `O*NET-SOC Sector` = as.factor(`O*NET-SOC Sector`),  # Factor for green job sectors
+    TOT_EMP_St_Paul = as.numeric(TOT_EMP_St_Paul),  # Numeric for employment totals
+    H_MEAN_St_Paul = as.numeric(H_MEAN_St_Paul),  # Numeric for hourly wage in St. Paul
+    A_MEAN_St_Paul = as.numeric(A_MEAN_St_Paul),  # Numeric for annual wage in St. Paul
+    AGEP = as.factor(AGEP),  # Age as a factor if we treat it categorically
+    RAC1P = as.factor(RAC1P),  # Factor for race
+    SEX = as.factor(SEX),  # Factor for gender
+    SCHL = as.factor(SCHL),  # Factor for education level
+    PINCP = as.numeric(PINCP),  # Numeric for personal income
+    ADJINC = as.numeric(ADJINC),  # Numeric for adjusted income
+    WAGP = as.numeric(WAGP),  # Numeric for wage
+    PWGTP = as.numeric(PWGTP),  # Numeric for person weight
+    `Green Job Flag` = as.numeric(`Green Job Flag`)  # Yes/No as numeric
+  )
+```
+
+But we first need to map the quality jobs **from quality_green_jobs** into `merged_green_jobs_data` so we can indicate jobs that are high, medium or low-quality.
+
+```{r}
+# Ensure both variables are of the same type
+quality_green_jobs <- quality_green_jobs %>%
+  mutate(occ6 = as.character(occ6))
+
+merged_green_jobs_data <- merged_green_jobs_data %>%
+  mutate(OCC_CODE = as.character(OCC_CODE))
+
+# Perform the left join to add the 'quality' variable from quality_green_jobs
+merged_green_jobs_data <- merged_green_jobs_data %>%
+  left_join(quality_green_jobs %>% select(occ6, quality), 
+            by = c("OCC_CODE" = "occ6"))
+
+# Save the merged dataset for future reference
+saveRDS(merged_green_jobs_data, here("processed_data", "merged_green_jobs_data.rds"))
+write_csv(merged_green_jobs_data, here("processed_data", "merged_green_jobs_data.csv"))
+```
+
+To group by the `O*NET-SOC Sector` and demographic factors like `education`, `race`, `gender`, and `income`, we can create summary statistics for each sector to analyze how the green jobs are distributed across different demographic categories.
+
+#### Education levels
+
+```{r}
+# Group the data by sector and demographic variables, then summarize the counts and income
+green_job_summary <- merged_green_jobs_data %>%
+  group_by(`O*NET-SOC Sector`, SCHL, RAC1P, SEX) %>%
+  summarise(
+    total_jobs = n(),  # Count total jobs
+    mean_income = mean(PINCP, na.rm = TRUE)  # Calculate mean income for each group
+  )
+
+# View the summarized data
+print(green_job_summary)
+
+# Remove rows with NA in 'SCHL' or 'O*NET-SOC Sector'
+cleaned_green_job_summary <- green_job_summary %>%
+  filter(!is.na(SCHL), !is.na(`O*NET-SOC Sector`))
+```
+
+```{r}
+# Plot percentage of jobs by sector and education level
+green_job_summary_percentage <- merged_green_jobs_data %>%
+  group_by(`O*NET-SOC Sector`, SCHL) %>%
+  summarise(total_jobs = n()) %>%
+  mutate(percentage_jobs = total_jobs / sum(total_jobs) * 100)
+
+ggplot(green_job_summary_percentage, aes(x = `O*NET-SOC Sector`, y = percentage_jobs, fill = SCHL)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Green Jobs by Sector and Education Level",
+       x = "Green Job Sector", y = "Percentage of Total Jobs") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Bar plot with education, faceted by job quality and sector
+green_job_education_sector <- merged_green_jobs_data %>%
+  filter(!is.na(SCHL), !is.na(quality)) %>%
+  group_by(`O*NET-SOC Sector`, quality, SCHL) %>%
+  summarise(total_jobs = n()) %>%
+  mutate(percentage_jobs = total_jobs / sum(total_jobs) * 100)
+
+ggplot(green_job_education_sector, aes(x = quality, y = percentage_jobs, fill = SCHL)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Green Jobs by Job Quality, Sector, and Education Level",
+       x = "Job Quality", y = "Percentage of Total Jobs") +
+  theme_minimal() +
+  facet_wrap(~`O*NET-SOC Sector`) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+#### Race
+
+```{r}
+# Bar plot for green jobs by sector and race
+ggplot(green_job_summary, aes(x = `O*NET-SOC Sector`, y = total_jobs, fill = RAC1P)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Green Jobs by Sector and Race",
+       x = "Green Job Sector", y = "Total Jobs") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Bar plot for green jobs by sector and race (percentage)
+green_job_race_percentage <- merged_green_jobs_data %>%
+  group_by(`O*NET-SOC Sector`, RAC1P) %>%
+  summarise(total_jobs = n()) %>%
+  mutate(percentage_jobs = total_jobs / sum(total_jobs) * 100)
+
+ggplot(green_job_race_percentage, aes(x = `O*NET-SOC Sector`, y = percentage_jobs, fill = RAC1P)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Green Jobs by Sector and Race",
+       x = "Green Job Sector", y = "Percentage of Total Jobs") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Bar plot with race, faceted by job quality and sector
+green_job_race_sector <- merged_green_jobs_data %>%
+  filter(!is.na(RAC1P), !is.na(quality)) %>%
+  group_by(`O*NET-SOC Sector`, quality, RAC1P) %>%
+  summarise(total_jobs = n()) %>%
+  mutate(percentage_jobs = total_jobs / sum(total_jobs) * 100)
+
+ggplot(green_job_race_sector, aes(x = quality, y = percentage_jobs, fill = RAC1P)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Green Jobs by Job Quality, Sector, and Race",
+       x = "Job Quality", y = "Percentage of Total Jobs") +
+  theme_minimal() +
+  facet_wrap(~`O*NET-SOC Sector`) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+#### Gender
+
+```{r}
+# Bar plot for green jobs by sector and gender (percentage)
+green_job_gender_percentage <- merged_green_jobs_data %>%
+  group_by(`O*NET-SOC Sector`, SEX) %>%
+  summarise(total_jobs = n()) %>%
+  mutate(percentage_jobs = total_jobs / sum(total_jobs) * 100)
+
+ggplot(green_job_gender_percentage, aes(x = `O*NET-SOC Sector`, y = percentage_jobs, fill = SEX)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Green Jobs by Sector and Gender",
+       x = "Green Job Sector", y = "Percentage of Total Jobs") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Bar plot with job quality on the x-axis and percentage by gender
+green_job_quality_gender <- merged_green_jobs_data %>%
+  group_by(quality, SEX) %>%
+  summarise(total_jobs = n()) %>%
+  mutate(percentage_jobs = total_jobs / sum(total_jobs) * 100)
+
+ggplot(green_job_quality_gender, aes(x = quality, y = percentage_jobs, fill = SEX)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Green Jobs by Job Quality and Gender",
+       x = "Job Quality", y = "Percentage of Total Jobs") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Bar plot with job quality on the x-axis, percentage by gender, and facets by sector
+green_job_quality_gender_sector <- merged_green_jobs_data %>%
+  filter(!is.na(SEX), !is.na(quality)) %>%
+  group_by(`O*NET-SOC Sector`, quality, SEX) %>%
+  summarise(total_jobs = n()) %>%
+  mutate(percentage_jobs = total_jobs / sum(total_jobs) * 100)
+
+ggplot(green_job_quality_gender_sector, aes(x = quality, y = percentage_jobs, fill = SEX)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Percentage of Green Jobs by Job Quality, Sector, and Gender",
+       x = "Job Quality", y = "Percentage of Total Jobs") +
+  theme_minimal() +
+  facet_wrap(~`O*NET-SOC Sector`) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+#### Income
+
+```{r}
+# Box plot for income distribution by sector and education level
+ggplot(merged_green_jobs_data, aes(x = `O*NET-SOC Sector`, y = PINCP, fill = RAC1P)) +
+  geom_boxplot() +
+  labs(title = "Income Distribution by Sector and Education Level",
+       x = "Green Job Sector", y = "Personal Income") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Box plot with income distribution, faceted by job quality and sector
+cleaned_data <- merged_green_jobs_data %>%
+  filter(!is.na(PINCP), !is.na(RAC1P), !is.na(quality))
+
+ggplot(cleaned_data, aes(x = quality, y = PINCP, fill = RAC1P)) +
+  geom_boxplot() +
+  labs(title = "Income Distribution by Job Quality, Sector, and Race",
+       x = "Job Quality", y = "Personal Income") +
+  theme_minimal() +
+  facet_wrap(~`O*NET-SOC Sector`) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
