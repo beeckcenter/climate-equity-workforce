@@ -1,4 +1,1 @@
 *.csv filter=lfs diff=lfs merge=lfs -text
-processed_data/National_ACS_All_Jobs.csv filter=lfs diff=lfs merge=lfs -text
-processed_data/merged_st_paul_jobs_acs.csv filter=lfs diff=lfs merge=lfs -text
-raw_data/Minnesota[[:space:]]-[[:space:]]ACS[[:space:]]PUMS[[:space:]]-[[:space:]]Five-Years/psam_p27.csv filter=lfs diff=lfs merge=lfs -text
