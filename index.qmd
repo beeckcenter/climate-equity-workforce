@@ -1166,7 +1166,7 @@ glimpse(st_paul_jobs_weighted)
 saveRDS(st_paul_jobs_weighted, here("processed_data", "st_paul_jobs_weighted.rds"))
 write_csv(st_paul_jobs_weighted, here("processed_data", "st_paul_jobs_weighted.csv"))
 
-# Optional: Print some summary statistics for St. Paul-specific employment and wages
+# Print some summary statistics for St. Paul-specific employment and wages
 summary_st_paul_jobs <- st_paul_jobs_weighted %>%
   summarize(
     Total_Employment = sum(TOT_EMP_St_Paul, na.rm = TRUE),
@@ -1524,4 +1524,48 @@ ggplot(cleaned_data, aes(x = quality, y = PINCP, fill = RAC1P)) +
   theme_minimal() +
   facet_wrap(~`O*NET-SOC Sector`) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Create green_job_income_sector data frame with income summary stats
+green_job_income_sector <- merged_green_jobs_data %>%
+  filter(!is.na(PINCP), !is.na(quality), !is.na(`O*NET-SOC Sector`)) %>%
+  group_by(`O*NET-SOC Sector`, quality) %>%
+  summarise(
+    mean_income = mean(PINCP, na.rm = TRUE),
+    median_income = median(PINCP, na.rm = TRUE),
+    total_jobs = n()
+  )
+
+write.csv(green_job_income_sector, "green_job_income_sector.csv", row.names = FALSE)
+
+# Summarize income distribution by job quality, sector, and race
+green_job_income_race_sector <- merged_green_jobs_data %>%
+  filter(!is.na(PINCP), !is.na(quality), !is.na(RAC1P), !is.na(`O*NET-SOC Sector`)) %>%
+  group_by(`O*NET-SOC Sector`, quality, RAC1P) %>%
+  summarise(
+    mean_income = mean(PINCP, na.rm = TRUE),
+    median_income = median(PINCP, na.rm = TRUE),
+    total_jobs = n()
+  ) %>%
+  ungroup()
+
+print(green_job_income_race_sector)
+
+write.csv(green_job_income_race_sector, "green_job_income_race_sector.csv", row.names = FALSE)
 ```
+
+### Export summary statistics for visualization
+
+```{r}
+# Create the directory if it doesn't exist
+if(!dir.exists("equity_data")) {
+  dir.create("equity_data")
+}
+
+# Save the CSV files to the equity_data folder
+write.csv(green_job_education_sector, "equity_data/green_job_education_sector.csv", row.names = FALSE)
+write.csv(green_job_quality_gender_sector, "equity_data/green_job_quality_gender_sector.csv", row.names = FALSE)
+write.csv(green_job_race_sector, "equity_data/green_job_race_sector.csv", row.names = FALSE)
+write.csv(green_job_income_sector, "equity_data/green_job_income_sector.csv", row.names = FALSE)
+write.csv(green_job_income_race_sector, "equity_data/green_job_income_race_sector.csv", row.names = FALSE)
+```
+
